@@ -3,6 +3,7 @@ package io.github.gelassen.blog
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -19,6 +20,7 @@ class IntegrationTests(@Autowired val restTemplate: TestRestTemplate) {
   }
 
   @Test
+//  @Disabled("Unclear cause of this issue")
   fun `Assert blog page title, content and status code`() {
     println(">> Assert blog page title, content and status code")
     val entity = restTemplate.getForEntity<String>("/")

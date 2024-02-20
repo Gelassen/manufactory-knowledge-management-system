@@ -1,0 +1,25 @@
+services:
+  server:
+    hostname: knowledge-management-server
+    image: alpine:3.19.1
+    working_dir: /usr/src/manufactory-knowledge-management-system/backend/samples/blog
+#    volumes:
+#      - ./server:/usr/src/swap/server
+#      - ./infrastructure/server:/root
+    command: >
+      sh -c "./gradlew bootRun"
+    ports:
+      - "8080:8080"
+    networks:
+      priv-knowledge-system-net:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+networks:
+  priv-knowledge-system-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.254.0/28
