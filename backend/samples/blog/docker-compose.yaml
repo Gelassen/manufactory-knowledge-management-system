@@ -2,17 +2,8 @@ services:
   server:
     hostname: knowledge-management-server
     container_name: knowledge-management-server
-#    image: alpine:3.19.1
     build:
-      context: ./docker
-    working_dir: /usr/src/manufactory-knowledge-management-system/backend/samples/blog
-#    volumes:
-#      - ./server:/usr/src/swap/server
-#      - ./infrastructure/server:/root
-    volumes:
-      - .:/usr/src/knowledge-management-server
-    command: >
-      sh -c "./gradlew bootRun"
+      context: .
     ports:
       - "8080:8080"
     networks:
