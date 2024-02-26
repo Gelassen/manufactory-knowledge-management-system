@@ -1,21 +1,20 @@
 package io.github.gelassen.manufactory_knowledge_management.model
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
+import jakarta.persistence.*
+import java.util.*
 
-@Entity(name = "breakdown")
+@Entity(name = "Breakdowns")
 data class Breakdown(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long,
+    @Column(name = "breakdown_id")
+    var id: Long? = null,
     var failure: String,
     var solution: String,
     var dateTime: Long,
-    var machineId: Long,
     @ManyToOne
-    var machine: Machine
+    @JoinColumn(name = "machine_id")
+    var machine: Machine? = null,
+    @OneToMany(mappedBy = "breakdown")
+    var photofixations: Collection<Photofixation> = emptyList()
 )
