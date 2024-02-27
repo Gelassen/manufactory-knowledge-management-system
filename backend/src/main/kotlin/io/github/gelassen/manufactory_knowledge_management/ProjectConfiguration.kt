@@ -10,14 +10,7 @@ class ProjectConfiguration {
 
     @Bean
     fun databaseInitializer(machineRepository: MachinesRepository) = ApplicationRunner {
-        var sodickSaved = machineRepository.save(
-            Machine(
-                name = "Sodick 360b",
-                manufacturer = "Sodick",
-                barcode = "Sodick 360b"
-            )
-        )
-/*        var sodickSaved = machineRepository.save(Machine(
+        var sodickSaved = machineRepository.save(Machine(
                 name = "Sodick 360b",
                 manufacturer = "Sodick",
                 barcode = "Sodick 360b"
@@ -27,6 +20,6 @@ class ProjectConfiguration {
             name = "Fanuc 2000",
             manufacturer = "Fanuc",
             barcode = "Fanuc 2000")
-        )*/
+        )
     }
 }
