@@ -16,6 +16,7 @@ data class Machine(
     var name: String,
     var manufacturer: String,
     var barcode: String,
+
     @OneToMany(mappedBy = "machine")
     var breakdowns: Collection<Breakdown> = emptyList()
 )

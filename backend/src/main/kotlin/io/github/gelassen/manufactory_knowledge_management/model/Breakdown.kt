@@ -12,9 +12,11 @@ data class Breakdown(
     var failure: String,
     var solution: String,
     var dateTime: Long,
+
     @ManyToOne
     @JoinColumn(name = "machine_id")
     var machine: Machine? = null,
+
     @OneToMany(mappedBy = "breakdown")
     var photofixations: Collection<Photofixation> = emptyList()
 )

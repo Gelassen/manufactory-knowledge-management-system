@@ -8,6 +8,7 @@ data class Photofixation(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     var photo: String, /* Base64 string*/
+
     @ManyToOne
     @JoinColumn(name = "breakdown_id")
     var breakdown: Breakdown? = null

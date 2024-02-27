@@ -3,15 +3,26 @@ package io.github.gelassen.manufactory_knowledge_management
 import io.github.gelassen.manufactory_knowledge_management.model.Breakdown
 import io.github.gelassen.manufactory_knowledge_management.model.Machine
 import org.springframework.data.repository.CrudRepository
+import org.springframework.data.repository.NoRepositoryBean
+import org.springframework.data.repository.Repository
 
-interface MachinesRepository : CrudRepository<Machine, Long> {
+@NoRepositoryBean
+interface CustomMachinesRepository : Repository<Machine, Long> {
 
     fun getMachineByBarcode(barcode: String) : Machine?
 
 }
 
-interface BreakdownsRepository : CrudRepository<Breakdown, Long> {
+interface MachinesRepository : CrudRepository<Machine, Long>, CustomMachinesRepository { }
 
-    /*fun getBreakdownsByMachine(machineId: Long) : Collection<Breakdown>*/
+/*
+*   Ref. https://docs.spring.io/spring-data/jpa/reference/repositories/definition.html#page-title
+* */
+@NoRepositoryBean
+interface CustomBreakdownsRepository : Repository<Breakdown, Long> {
+
+    fun getBreakdownsByMachine(machineId: Long) : Collection<Breakdown>
 
 }
+
+interface BreakdownsRepository : CrudRepository<Breakdown, Long>, CustomBreakdownsRepository { }
