@@ -15,7 +15,7 @@ class MachineController(
 
     @GetMapping("/barcode/{barcode}")
     fun getMachineByBarcode(@PathVariable barcode: String) =
-        repository.getMachineByBarcode(barcode) ?: throw ResponseStatusException(
+        repository.findMachineByBarcode(barcode) ?: throw ResponseStatusException(
             HttpStatus.NOT_FOUND,
             "Machine with $barcode barcode does not exist. Did you send the right barcode?"
         )
