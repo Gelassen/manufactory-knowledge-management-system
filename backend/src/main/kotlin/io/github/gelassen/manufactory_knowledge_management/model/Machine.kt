@@ -19,5 +19,5 @@ data class Machine(
 
     @OneToMany(mappedBy = "machine", fetch = FetchType.LAZY)
     @JsonManagedReference
-    var breakdowns: Collection<Breakdown> = emptyList()
+    var breakdowns: MutableList<Breakdown> = mutableListOf()
 )
