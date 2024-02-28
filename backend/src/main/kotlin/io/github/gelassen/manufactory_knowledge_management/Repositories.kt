@@ -1,5 +1,6 @@
 package io.github.gelassen.manufactory_knowledge_management
 
+import io.github.gelassen.manufactory_knowledge_management.model.Breakdown
 import io.github.gelassen.manufactory_knowledge_management.model.Machine
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.NoRepositoryBean
@@ -15,11 +16,11 @@ interface MachinesRepository : CrudRepository<Machine, Long>, CustomMachinesRepo
 
 /*
 *   Ref. https://docs.spring.io/spring-data/jpa/reference/repositories/definition.html#page-title
-* *//*
+* */
 
 @NoRepositoryBean
-interface BreakdownsRepository : Repository<Breakdown, Long> {
+interface CustomBreakdownsRepository : Repository<Breakdown, Long> {
+    fun getBreakdownsByMachine(machine: Machine) : Collection<Breakdown>
+}
 
-    fun getBreakdownsByMachine(machineId: Long) : Collection<Breakdown>
-
-}*/
+interface BreakdownsRepository : CrudRepository<Breakdown, Long>, CustomBreakdownsRepository {}
