@@ -1,3 +1,6 @@
+import com.android.build.gradle.internal.tasks.factory.dependsOn
+import java.util.Locale
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -29,6 +32,17 @@ android {
     }
     kotlinOptions {
         jvmTarget = libs.versions.jvmTarget.get().toString()
+    }
+    lint {
+        abortOnError = true
+//        disable 'ContentDescription'
+    }
+    applicationVariants.configureEach {
+        val variantName =
+            name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ENGLISH) else it.toString() }
+        val lintTaskName = "lint$variantName"
+        val lintTask = tasks.named("lint$variantName")
+        assembleProvider.dependsOn(lintTask, tasks.named(lintTaskName))
     }
 }
 
