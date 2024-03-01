@@ -1,8 +1,7 @@
 [versions]
 androidGradlePlugin = "8.2.2"
 androidLibrary = "8.2.2"
-kotlinAndroid = "1.9.22" # sic!
-staticAnalysis = "1.4"
+kotlinAndroid = "1.9.22"
 jvmTarget = "1.8"
 
 minSdkVersion = "23"
@@ -25,8 +24,8 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 
-androidx-ext-junit = { group = "androidx.androidx.ext", name = "junit", version.ref = "extJunit" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "extJunit" }
+androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
 #stub = { group = "", name = "", version.ref = "" }
 
@@ -34,4 +33,3 @@ espresso-core = { group = "androidx.test.espresso", name = "espresso-core", vers
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidLibrary" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinAndroid" }
-gradleup-static-analysis = { id = "com.gradleup.static-analysis", version.ref = "staticAnalysis" }
