@@ -25,8 +25,8 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 
-androidx-ext-junit = { group = "androidx.androidx.ext", name = "junit", version.ref = "extJunit" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "extJunit" }
+androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
 #stub = { group = "", name = "", version.ref = "" }
 
