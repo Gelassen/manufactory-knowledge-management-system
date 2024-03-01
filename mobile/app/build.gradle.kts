@@ -4,6 +4,7 @@ import java.util.Locale
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -54,9 +55,12 @@ dependencies {
 
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.core.ktx)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
 }

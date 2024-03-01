@@ -5,8 +5,8 @@ import io.github.gelassen.manufactory_knowledge_management.storage.model.Machine
 
 interface IMachinesRepository {
 
-    suspend fun saveMachine(machine: Machine) : Long
+    suspend fun saveMachine(machine: Machine) : List<Long>
 
-    suspend fun getMachineByBarcode(barcode: String) : Machine
+    suspend fun getMachineByBarcode(barcode: String) : Machine?
 
 }

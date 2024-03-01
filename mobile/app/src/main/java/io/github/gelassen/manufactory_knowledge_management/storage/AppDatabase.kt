@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.github.gelassen.manufactory_knowledge_management.App
+import io.github.gelassen.manufactory_knowledge_management.storage.dao.MachinesDao
 import io.github.gelassen.manufactory_knowledge_management.storage.model.BreakdownAndPhotos
 import io.github.gelassen.manufactory_knowledge_management.storage.model.BreakdownEntity
 import io.github.gelassen.manufactory_knowledge_management.storage.model.MachineAndBreakdowns
@@ -21,10 +22,12 @@ import io.github.gelassen.manufactory_knowledge_management.storage.model.Photofi
         BreakdownAndPhotos::class*/
                ],
 //    views = [DataItemFromView::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
+
+    abstract fun machinesDao() : MachinesDao
 
     companion object {
         // For Singleton instantiation

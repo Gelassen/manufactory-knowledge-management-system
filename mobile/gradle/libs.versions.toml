@@ -3,6 +3,8 @@ androidGradlePlugin = "8.2.2"
 androidLibrary = "8.2.2"
 kotlinAndroid = "1.9.22"
 jvmTarget = "1.8"
+ksp = "1.9.10-1.0.13"
+
 
 minSdkVersion = "23"
 targetSdkVersion = "34"
@@ -21,6 +23,8 @@ roomKtx = "2.6.1"
 junit = "4.13.2"
 extJunit = "1.1.5"
 espressoCore = "3.5.1"
+coreKtxVersion = "1.5.0"
+kotlinxCoroutinesTest = "1.6.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -29,6 +33,7 @@ android-material = { group = "com.google.android.material", name = "material", v
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 # databases
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 
@@ -37,6 +42,8 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "extJunit" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+core-ktx = { module = "androidx.test:core-ktx", version.ref = "coreKtxVersion" }
 
 #stub = { group = "", name = "", version.ref = "" }
 
@@ -44,3 +51,4 @@ androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espres
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidLibrary" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinAndroid" }
+ksp = {id = "com.google.devtools.ksp", version.ref = "ksp" }

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import io.github.gelassen.manufactory_knowledge_management.model.Machine
 import io.github.gelassen.manufactory_knowledge_management.storage.model.MachineAndBreakdowns
 import io.github.gelassen.manufactory_knowledge_management.storage.model.MachineEntity
 import io.github.gelassen.manufactory_knowledge_management.storage.model.Schema
@@ -12,7 +13,7 @@ import io.github.gelassen.manufactory_knowledge_management.storage.model.Schema
 interface MachinesDao {
 
     @Insert
-    suspend fun saveMachine(machineEntity: MachineEntity): Long
+    suspend fun saveMachine(vararg machineEntity: MachineEntity): List<Long>
 
     @Transaction
     @Query("" +
@@ -27,5 +28,5 @@ interface MachinesDao {
                 "${Schema.Photofixation.TABLE_NAME}.${Schema.Photofixation.BREAKDOWN_ID} " +
             "WHERE ${Schema.Machine.TABLE_NAME}.${Schema.Machine.BARCODE} = :barcode;"
     )
-    suspend fun getMachineByBarcode(barcode: String): MachineAndBreakdowns
+    suspend fun getMachineByBarcode(barcode: String): MachineAndBreakdowns?
 }
