@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import io.github.gelassen.manufactory_knowledge_management.model.Photofixation
 
 //@Entity(tableName = )
 @Entity(
@@ -26,3 +27,10 @@ data class PhotofixationEntity(
     @ColumnInfo(name = Schema.Photofixation.BREAKDOWN_ID)
     val breakdownId: Long
 )
+
+fun PhotofixationEntity.toDomain(): Photofixation {
+    return Photofixation(
+        id = this.id,
+        photo = this.photo
+    )
+}

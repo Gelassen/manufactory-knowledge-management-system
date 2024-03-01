@@ -2,6 +2,7 @@ package io.github.gelassen.manufactory_knowledge_management.storage.model
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import io.github.gelassen.manufactory_knowledge_management.model.Machine
 
 data class MachineAndBreakdowns(
     @Embedded
@@ -18,3 +19,13 @@ data class MachineAndBreakdowns(
     )
     val breakdowns: List<BreakdownAndPhotos>
 )
+
+fun MachineAndBreakdowns.toDomain(): Machine {
+    return Machine(
+        id = machine.id,
+        name = machine.name,
+        manufacturer = machine.manufacturer,
+        barcode = machine.barcode,
+        breakdowns = breakdowns.map { it.toDomain() }
+    )
+}

@@ -6,13 +6,19 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.github.gelassen.manufactory_knowledge_management.App
+import io.github.gelassen.manufactory_knowledge_management.storage.model.BreakdownAndPhotos
+import io.github.gelassen.manufactory_knowledge_management.storage.model.BreakdownEntity
+import io.github.gelassen.manufactory_knowledge_management.storage.model.MachineAndBreakdowns
+import io.github.gelassen.manufactory_knowledge_management.storage.model.MachineEntity
+import io.github.gelassen.manufactory_knowledge_management.storage.model.PhotofixationEntity
 
 @Database(
     entities = [
-/*        ChainTransactionEntity::class,
-        ServerRequestTransactionEntity::class,
-        MatchEntity::class,
-        ChainServiceEntity::class*/
+        MachineEntity::class,
+        BreakdownEntity::class,
+        PhotofixationEntity::class,
+/*        MachineAndBreakdowns::class,
+        BreakdownAndPhotos::class*/
                ],
 //    views = [DataItemFromView::class],
     version = 1,

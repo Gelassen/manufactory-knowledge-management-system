@@ -19,7 +19,7 @@ import androidx.room.PrimaryKey
 data class BreakdownEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = Schema.Breakdown.UID)
-    val id: String,
+    val id: Long,
     @ColumnInfo(name = Schema.Breakdown.FAILURE)
     val failure: String,
     @ColumnInfo(name = Schema.Breakdown.SOLUTION)
