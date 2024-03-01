@@ -12,6 +12,12 @@ coreKtx = "1.10.1"
 appCompat = "1.6.1"
 androidMaterial = "1.9.0"
 constraintlayout = "2.1.4"
+
+# datanses
+roomRuntime = "2.6.1"
+roomKtx = "2.6.1"
+
+# tests
 junit = "4.13.2"
 extJunit = "1.1.5"
 espressoCore = "3.5.1"
@@ -22,6 +28,11 @@ androidx-constraintlayout-appcompat = { group = "androidx.appcompat", name = "ap
 android-material = { group = "com.google.android.material", name = "material", version.ref = "androidMaterial" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
+# databases
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
+
+# tests
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "extJunit" }
