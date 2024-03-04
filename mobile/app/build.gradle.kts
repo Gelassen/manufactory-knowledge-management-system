@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.retrofit2.converter.gson)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.okhttp3.logging.interceptor)
 
     // dependency injection
     implementation(libs.dagger)

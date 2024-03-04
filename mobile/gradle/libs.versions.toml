@@ -1,20 +1,24 @@
 [versions]
+# plugins
 androidGradlePlugin = "8.2.2"
 androidLibrary = "8.2.2"
 kotlinAndroid = "1.9.22"
-jvmTarget = "1.8"
-ksp = "1.9.10-1.0.13"
-kotlinJvm = "1.9.0"
+ksp = "1.9.22-1.0.17"
+kotlinJvm = "1.9.22"
 
-
+# platform configuration
 minSdkVersion = "23"
 targetSdkVersion = "34"
 compileSdkVersion = "34"
+jvmTarget = "1.8"
 
+# core
 coreKtx = "1.10.1"
 appCompat = "1.6.1"
 androidMaterial = "1.9.0"
 constraintlayout = "2.1.4"
+
+okHttp3LoggingInterceptor = "4.9.0"
 
 # kotlinx
 kotlinxCoroutinesCore = "1.7.3"
@@ -26,13 +30,13 @@ retrofit2 = "2.9.0"
 retrofitConverterGson = "2.9.0"
 
 # dependency injection
-dagger = "2.44.2"
-daggerAndroidSupport = "2.44.2"
-daggerAndroid = "2.44.2"
+dagger = "2.51"
+daggerAndroidSupport = "2.51"
+daggerAndroid = "2.51"
 
 # kapt
-kspDaggerCmpiler = "2.44.2"
-kspDaggerAndroidProcessor = "2.44.2"
+kspDaggerCmpiler = "2.51"
+kspDaggerAndroidProcessor = "2.51"
 
 # databases
 roomRuntime = "2.6.1"
@@ -81,6 +85,9 @@ androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 core-ktx = { module = "androidx.test:core-ktx", version.ref = "coreKtxVersion" }
+
+# others
+okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttp3LoggingInterceptor" }
 
 #stub = { group = "", name = "", version.ref = "" }
 
