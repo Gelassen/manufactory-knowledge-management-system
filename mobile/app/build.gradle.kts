@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
+    /* alias(libs.plugins.kotlin.jvm) seems it is already added despite on project level explicitly set 'apply false' clause */
 }
 
 android {
@@ -53,9 +54,25 @@ dependencies {
     implementation(libs.android.material)
     implementation(libs.androidx.constraintlayout)
 
+    // network
+    implementation(libs.retrofit2.retrofit)
+    implementation(libs.retrofit2.converter.gson)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
+    // dependency injection
+    implementation(libs.dagger)
+    implementation(libs.dagger.android.support)
+    implementation(libs.dagger.android)
+
+
+    // storage
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+
     ksp(libs.androidx.room.compiler)
+    ksp(libs.ksp.dagger.compiler)
+    ksp(libs.ksp.dagger.android.processor)
 
     testImplementation(libs.junit)
 

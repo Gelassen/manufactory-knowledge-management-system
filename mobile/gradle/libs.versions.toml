@@ -4,6 +4,7 @@ androidLibrary = "8.2.2"
 kotlinAndroid = "1.9.22"
 jvmTarget = "1.8"
 ksp = "1.9.10-1.0.13"
+kotlinJvm = "1.9.0"
 
 
 minSdkVersion = "23"
@@ -15,7 +16,25 @@ appCompat = "1.6.1"
 androidMaterial = "1.9.0"
 constraintlayout = "2.1.4"
 
-# datanses
+# kotlinx
+kotlinxCoroutinesCore = "1.7.3"
+kotlinxCoroutinesAndroid = "1.7.1"
+kotlinxCoroutinesReactive = "1.6.4"
+
+# retrofit
+retrofit2 = "2.9.0"
+retrofitConverterGson = "2.9.0"
+
+# dependency injection
+dagger = "2.44.2"
+daggerAndroidSupport = "2.44.2"
+daggerAndroid = "2.44.2"
+
+# kapt
+kspDaggerCmpiler = "2.44.2"
+kspDaggerAndroidProcessor = "2.44.2"
+
+# databases
 roomRuntime = "2.6.1"
 roomKtx = "2.6.1"
 
@@ -32,10 +51,28 @@ androidx-constraintlayout-appcompat = { group = "androidx.appcompat", name = "ap
 android-material = { group = "com.google.android.material", name = "material", version.ref = "androidMaterial" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
+# kotlinx
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+kotlinx-coroutines-reactive = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-reactive", version.ref = "kotlinxCoroutinesReactive" }
+
+# retrofit
+retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
+retrofit2-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofitConverterGson" }
+
 # databases
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
+
+# dependency injection
+dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
+dagger-android-support = { group = "com.google.dagger", name = "dagger-android-support", version.ref = "daggerAndroidSupport" }
+dagger-android = { group = "com.google.dagger", name = "dagger-android", version.ref = "daggerAndroid" }
+
+# ksp
+ksp-dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "kspDaggerCmpiler" }
+ksp-dagger-android-processor = { group = "com.google.dagger", name = "dagger-android-processor", version.ref = "kspDaggerAndroidProcessor" }
 
 # tests
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -52,3 +89,4 @@ android-application = { id = "com.android.application", version.ref = "androidGr
 android-library = { id = "com.android.library", version.ref = "androidLibrary" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinAndroid" }
 ksp = {id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinJvm" }
