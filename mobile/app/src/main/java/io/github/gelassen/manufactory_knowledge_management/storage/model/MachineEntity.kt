@@ -3,10 +3,12 @@ package io.github.gelassen.manufactory_knowledge_management.storage.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
     tableName = Schema.Machine.TABLE_NAME,
+    indices = [Index(value = [Schema.Machine.UID])]
 )
 data class MachineEntity(
     @PrimaryKey(autoGenerate = true)

@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout.appcompat)
     implementation(libs.android.material)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
     // network
     implementation(libs.retrofit2.retrofit)
@@ -66,11 +67,26 @@ dependencies {
     implementation(libs.dagger.android.support)
     implementation(libs.dagger.android)
 
-
     // storage
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
 
+    // mlkit
+    implementation(libs.mlkit.barcode.scanning)
+
+    // CameraX
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.video)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.extensions)
+
+    // Navigation library
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+
+    // ksp
     ksp(libs.androidx.room.compiler)
     ksp(libs.ksp.dagger.compiler)
     ksp(libs.ksp.dagger.android.processor)

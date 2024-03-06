@@ -8,8 +8,8 @@ import io.github.gelassen.manufactory_knowledge_management.network.model.ApiResp
 import io.github.gelassen.manufactory_knowledge_management.network.model.toApiResponse
 import javax.inject.Inject
 
-class MachinesRepository(
-    @Inject val api: IApi
+class MachinesRepository @Inject constructor(
+    var api: IApi
 ) : IMachinesRepository {
 
     override suspend fun getMachineByBarcode(barcode: String): ApiResponse<Machine> {
