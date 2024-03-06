@@ -85,6 +85,7 @@ dependencies {
     // Navigation library
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.camera.mlkit.vision)
 
     // ksp
     ksp(libs.androidx.room.compiler)

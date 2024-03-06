@@ -3,22 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/permission_fragment"
+    app:startDestination="@id/scanner_fragment"
     >
 
-    <fragment
-        android:id="@+id/permission_fragment"
-        android:name="io.github.gelassen.manufactory_knowledge_management.ui.PermissionsFragment"
-        android:label="PermissionsFragment"
-        >
+<!--    <fragment-->
+<!--        android:id="@+id/permission_fragment"-->
+<!--        android:name="io.github.gelassen.manufactory_knowledge_management.ui.PermissionsFragment"-->
+<!--        android:label="PermissionsFragment"-->
+<!--        >-->
 
-        <action
-            android:id="@+id/action_permission_to_scanner"
-            app:destination="@id/scanner_fragment"
-            app:popUpTo="@id/permission_fragment"
-            />
-
-    </fragment>
+<!--        <action-->
+<!--            android:id="@+id/action_permission_to_scanner"-->
+<!--            app:destination="@id/scanner_fragment"-->
+<!--            app:popUpTo="@id/permission_fragment"-->
+<!--            />-->
+<!--
+    </fragment>-->
 
     <fragment
         android:id="@+id/scanner_fragment"

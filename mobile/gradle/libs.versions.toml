@@ -54,6 +54,7 @@ extJunit = "1.1.5"
 espressoCore = "3.5.1"
 coreKtxVersion = "1.5.0"
 kotlinxCoroutinesTest = "1.6.4"
+cameraMlkitVision = "1.4.0-alpha04"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -111,6 +112,7 @@ core-ktx = { module = "androidx.test:core-ktx", version.ref = "coreKtxVersion" }
 
 # others
 okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttp3LoggingInterceptor" }
+androidx-camera-mlkit-vision = { group = "androidx.camera", name = "camera-mlkit-vision", version.ref = "cameraMlkitVision" }
 
 #stub = { group = "", name = "", version.ref = "" }
 

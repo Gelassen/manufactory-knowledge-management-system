@@ -37,10 +37,10 @@ class PermissionsFragment : Fragment() {
     }
 
     private fun navigateToCamera() {
-        lifecycleScope.launchWhenStarted {
-//            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
-//                PermissionsFragmentDirections.actionPermissionsFragmentDirectionsPermissionsToCamera())
-        }
+/*        lifecycleScope.launchWhenStarted {
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                .navigate(R.id.action_permission_to_scanner)
+        }*/
     }
 
     private val activityResultLauncher =
