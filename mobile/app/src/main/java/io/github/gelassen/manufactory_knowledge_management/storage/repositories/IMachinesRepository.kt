@@ -7,6 +7,6 @@ interface IMachinesRepository {
 
     suspend fun saveMachine(machine: Machine) : List<Long>
 
-    suspend fun getMachineByBarcode(barcode: String) : Machine?
+    suspend fun getMachineByUniqueIdentifier(barcode: String) : Machine?
 
 }

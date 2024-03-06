@@ -51,7 +51,7 @@ class MachinesDaoTest {
         launch { machinesDao.saveMachine(*dataset.map { it.fromDomain() }.toTypedArray()) }
         advanceUntilIdle()
 
-        val result = machineRepository.getMachineByBarcode(barcodes[0])
+        val result = machineRepository.getMachineByUniqueIdentifier(barcodes[0])
 
         assertEquals(dataset[0].name, result!!.name)
         assertEquals(dataset[0].breakdowns, result.breakdowns)
@@ -67,7 +67,7 @@ class MachinesDaoTest {
         launch { machinesDao.saveMachine(*dataset.map { it.fromDomain() }.toTypedArray()) }
         advanceUntilIdle()
 
-        val result = machineRepository.getMachineByBarcode("not-valid-barcode")
+        val result = machineRepository.getMachineByUniqueIdentifier("not-valid-barcode")
 
         assertNull(result)
 //        assertEquals(dataset.get(0).name, result.name)

@@ -12,7 +12,7 @@ class MachinesRepository(
         return machinesDao.saveMachine(machine.fromDomain())
     }
 
-    override suspend fun getMachineByBarcode(barcode: String): Machine? {
+    override suspend fun getMachineByUniqueIdentifier(barcode: String): Machine? {
         return machinesDao.getMachineByBarcode(barcode)?.toDomain()
     }
 }

@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/machines_fragment"
-        android:name="io.github.gelassen.manufactory_knowledge_management.ui.MachinesFragment"
+        android:name="io.github.gelassen.manufactory_knowledge_management.ui.MachineFragment"
         android:label="MachinesLabel" />
 
 </navigation>
