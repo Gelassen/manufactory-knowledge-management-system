@@ -1,8 +1,6 @@
 package io.github.gelassen.manufactory_knowledge_management.ui
 
 import android.Manifest
-import android.app.Activity
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,9 +12,11 @@ import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.navigation.findNavController
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
@@ -106,17 +106,27 @@ class ScannerFragment: Fragment() {
                     return@MlKitAnalyzer
                 }
 
-                Toast.makeText(
-                    requireActivity(),
-                    "QR code is scanned ${barcodeResults[0].rawValue}",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+                onSuccessfulBarcodeScan(barcodeResults)
             }
         )
 
         cameraController.bindToLifecycle(this)
         previewView.controller = cameraController
+    }
+
+    private fun onSuccessfulBarcodeScan(barcodeResults: MutableList<Barcode>) {
+        Toast.makeText(
+            requireActivity(),
+            "QR code is scanned ${barcodeResults[0].rawValue}",
+            Toast.LENGTH_SHORT
+        )
+            .show()
+        setFragmentResult(
+            MachinesFragment.EXTRA_MACHINE_ID,
+            bundleOf(MachinesFragment.MACHINE_ID to barcodeResults[0].rawValue)
+        )
+        val navController = requireActivity().findNavController(R.id.nav_host_fragment)
+        navController.navigate(R.id.action_scanner_to_machines)
     }
 
     companion object {

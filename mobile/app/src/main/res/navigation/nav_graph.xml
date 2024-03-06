@@ -6,24 +6,22 @@
     app:startDestination="@id/scanner_fragment"
     >
 
-<!--    <fragment-->
-<!--        android:id="@+id/permission_fragment"-->
-<!--        android:name="io.github.gelassen.manufactory_knowledge_management.ui.PermissionsFragment"-->
-<!--        android:label="PermissionsFragment"-->
-<!--        >-->
-
-<!--        <action-->
-<!--            android:id="@+id/action_permission_to_scanner"-->
-<!--            app:destination="@id/scanner_fragment"-->
-<!--            app:popUpTo="@id/permission_fragment"-->
-<!--            />-->
-<!--
-    </fragment>-->
-
     <fragment
         android:id="@+id/scanner_fragment"
         android:name="io.github.gelassen.manufactory_knowledge_management.ui.ScannerFragment"
-        android:label="ScannerFragment"
-        />
+        android:label="ScannerFragment">
+
+        <action
+            android:id="@+id/action_scanner_to_machines"
+            app:destination="@id/machines_fragment"
+            app:popUpTo="@id/scanner_fragment"
+            />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/machines_fragment"
+        android:name="io.github.gelassen.manufactory_knowledge_management.ui.MachinesFragment"
+        android:label="MachinesLabel" />
 
 </navigation>
