@@ -4,10 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import io.github.gelassen.manufactory_knowledge_management.model.Machine
 import io.github.gelassen.manufactory_knowledge_management.storage.model.MachineAndBreakdowns
 import io.github.gelassen.manufactory_knowledge_management.storage.model.MachineEntity
-import io.github.gelassen.manufactory_knowledge_management.storage.model.Schema
+import io.github.gelassen.manufactory_knowledge_management.storage.Schema
 
 @Dao
 interface MachinesDao {

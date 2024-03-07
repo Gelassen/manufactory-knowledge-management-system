@@ -2,9 +2,9 @@ package io.github.gelassen.manufactory_knowledge_management.storage.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import io.github.gelassen.manufactory_knowledge_management.storage.Schema
 
 @Entity(
     tableName = Schema.Machine.TABLE_NAME,

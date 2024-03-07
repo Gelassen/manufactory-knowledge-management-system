@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import io.github.gelassen.manufactory_knowledge_management.di.AppModule
 import io.github.gelassen.manufactory_knowledge_management.model.Machine
-import io.github.gelassen.manufactory_knowledge_management.model.fromDomain
+import io.github.gelassen.manufactory_knowledge_management.model.asEntity
 import io.github.gelassen.manufactory_knowledge_management.repository.MachinesRepository
 import io.github.gelassen.manufactory_knowledge_management.storage.AppDatabase
 import io.github.gelassen.manufactory_knowledge_management.storage.dao.MachinesDao
@@ -54,7 +54,7 @@ class MachinesDaoTest {
     fun getMachineByBarcode_withValidBarcodeAndStorage_receivesValidResponse() = runTest {
         val barcodes = arrayOf("123bqwqasd", "098234jkfwje0")
         val dataset = getStubMachines(*barcodes)
-        launch { machinesDao.saveMachine(*dataset.map { it.fromDomain() }.toTypedArray()) }
+        launch { machinesDao.saveMachine(*dataset.map { it.asEntity() }.toTypedArray()) }
         advanceUntilIdle()
 
         val result = subj.getMachineByUniqueIdentifier(barcodes[0])
@@ -69,7 +69,7 @@ class MachinesDaoTest {
     fun getMachineByBarcode_withNOTValidBarcodeAndStorage_receivesValidResponse() = runTest {
         val barcodes = arrayOf("123bqwqasd", "098234jkfwje0")
         val dataset = getStubMachines(*barcodes)
-        launch { machinesDao.saveMachine(*dataset.map { it.fromDomain() }.toTypedArray()) }
+        launch { machinesDao.saveMachine(*dataset.map { it.asEntity() }.toTypedArray()) }
         advanceUntilIdle()
 
         val result = subj.getMachineByUniqueIdentifier("not-valid-barcode")

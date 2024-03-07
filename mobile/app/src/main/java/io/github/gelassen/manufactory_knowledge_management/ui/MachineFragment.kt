@@ -61,7 +61,6 @@ class MachineFragment : Fragment() {
 
     private fun fetchMachinesByBarcode(machineId: String) {
         lifecycleScope.launch {
-//            viewModel.fetchMachinesByBarcode(machineId)
         }
     }
 }

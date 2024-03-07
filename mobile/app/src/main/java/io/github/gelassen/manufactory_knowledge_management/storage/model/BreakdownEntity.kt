@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import io.github.gelassen.manufactory_knowledge_management.storage.Schema
 
 @Entity(
     tableName = Schema.Breakdown.TABLE_NAME,

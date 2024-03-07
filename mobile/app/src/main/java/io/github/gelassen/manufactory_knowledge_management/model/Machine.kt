@@ -1,7 +1,6 @@
 package io.github.gelassen.manufactory_knowledge_management.model
 
 import com.google.gson.annotations.SerializedName
-import io.github.gelassen.manufactory_knowledge_management.storage.model.MachineAndBreakdowns
 import io.github.gelassen.manufactory_knowledge_management.storage.model.MachineEntity
 
 data class Machine(
@@ -12,7 +11,7 @@ data class Machine(
     @SerializedName("breakdowns"   ) var breakdowns   : List<Breakdown>       = emptyList()
 )
 
-fun Machine.fromDomain(): MachineEntity {
+fun Machine.asEntity(): MachineEntity {
     return MachineEntity(
         id = this.id!!,
         name = this.name!!,

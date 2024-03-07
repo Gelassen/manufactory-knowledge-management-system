@@ -1,4 +1,4 @@
-package io.github.gelassen.manufactory_knowledge_management.storage.model
+package io.github.gelassen.manufactory_knowledge_management.storage
 
 class Schema {
 

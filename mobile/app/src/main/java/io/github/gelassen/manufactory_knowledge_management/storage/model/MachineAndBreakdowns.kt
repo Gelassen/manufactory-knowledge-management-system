@@ -3,6 +3,7 @@ package io.github.gelassen.manufactory_knowledge_management.storage.model
 import androidx.room.Embedded
 import androidx.room.Relation
 import io.github.gelassen.manufactory_knowledge_management.model.Machine
+import io.github.gelassen.manufactory_knowledge_management.storage.Schema
 
 data class MachineAndBreakdowns(
     @Embedded

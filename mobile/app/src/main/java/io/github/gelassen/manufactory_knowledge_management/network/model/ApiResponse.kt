@@ -13,7 +13,3 @@ fun String.toApiResponse() : ApiResponse<Machine> {
     val gson = GsonBuilder().create()
     return gson.fromJson<ApiResponse<Machine>>(this, ApiResponse::class.java)
 }
-/*fun ApiResponse<String?>.fromDomain(json: String) : ApiResponse<String?> {
-    val gson = GsonBuilder().create()
-    return gson.fromJson<ApiResponse<String?>>(json, ApiResponse::class.java)
-}*/

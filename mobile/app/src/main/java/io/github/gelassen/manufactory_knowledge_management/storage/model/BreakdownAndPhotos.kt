@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Relation
 import io.github.gelassen.manufactory_knowledge_management.model.Breakdown
+import io.github.gelassen.manufactory_knowledge_management.storage.Schema
 
 @Entity
 data class BreakdownAndPhotos (
