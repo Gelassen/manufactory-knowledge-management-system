@@ -13,9 +13,11 @@ import dagger.android.support.AndroidSupportInjection
 import io.github.gelassen.manufactory_knowledge_management.App
 import io.github.gelassen.manufactory_knowledge_management.R
 import io.github.gelassen.manufactory_knowledge_management.di.ViewModelFactory
+import io.github.gelassen.manufactory_knowledge_management.di.ViewModelModule
 import io.github.gelassen.manufactory_knowledge_management.ui.viewmodel.MachinesViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Named
 
 class MachineFragment : Fragment() {
 
@@ -30,10 +32,11 @@ class MachineFragment : Fragment() {
         val EXTRA_MACHINE_ID = NAMESPACE.plus(MACHINE_ID)
     }
 
-//    @Inject
-//    lateinit var viewModelFactory: ViewModelFactory
+    @Inject
+    @Named(ViewModelModule.Names.MACHINE_VIEW_MODEL_FACTORY)
+    lateinit var viewModelFactory: ViewModelFactory
 
-//    private lateinit var viewModel: MachinesViewModel
+    private lateinit var viewModel: MachinesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -46,7 +49,7 @@ class MachineFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-//        viewModel = ViewModelProvider(this, viewModelFactory).get(MachinesViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MachinesViewModel::class.java)
         return inflater.inflate(R.layout.fragment_machines, container, false)
     }
 
@@ -61,6 +64,7 @@ class MachineFragment : Fragment() {
 
     private fun fetchMachinesByBarcode(machineId: String) {
         lifecycleScope.launch {
+            // TODO complete me
         }
     }
 }
