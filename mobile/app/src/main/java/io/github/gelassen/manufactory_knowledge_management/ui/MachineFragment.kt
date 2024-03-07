@@ -30,10 +30,10 @@ class MachineFragment : Fragment() {
         val EXTRA_MACHINE_ID = NAMESPACE.plus(MACHINE_ID)
     }
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+//    @Inject
+//    lateinit var viewModelFactory: ViewModelFactory
 
-    private lateinit var viewModel: MachinesViewModel
+//    private lateinit var viewModel: MachinesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -46,7 +46,7 @@ class MachineFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MachinesViewModel::class.java)
+//        viewModel = ViewModelProvider(this, viewModelFactory).get(MachinesViewModel::class.java)
         return inflater.inflate(R.layout.fragment_machines, container, false)
     }
 
@@ -61,7 +61,7 @@ class MachineFragment : Fragment() {
 
     private fun fetchMachinesByBarcode(machineId: String) {
         lifecycleScope.launch {
-            viewModel.fetchMachinesByBarcode(machineId)
+//            viewModel.fetchMachinesByBarcode(machineId)
         }
     }
 }

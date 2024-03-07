@@ -5,6 +5,9 @@ import dagger.Provides
 import io.github.gelassen.manufactory_knowledge_management.AppApplication
 import io.github.gelassen.manufactory_knowledge_management.R
 import io.github.gelassen.manufactory_knowledge_management.network.IApi
+import io.github.gelassen.manufactory_knowledge_management.repository.MachinesRepository
+import io.github.gelassen.manufactory_knowledge_management.storage.AppDatabase
+import io.github.gelassen.manufactory_knowledge_management.storage.dao.MachinesDao
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -22,7 +25,7 @@ class AppModule(val application: AppApplication) {
         const val DISPATCHER_MAIN = "Dispatchers.Main"
     }
 
-/*    @Singleton
+    @Singleton
     @Provides
     fun providesApi(httpClient: OkHttpClient) : IApi {
         val url = application.getString(R.string.main_endpoint)
@@ -34,7 +37,7 @@ class AppModule(val application: AppApplication) {
             .build()
 
         return retrofit.create(IApi::class.java)
-    }*/
+    }
 
     @Singleton
     @Provides
@@ -50,10 +53,28 @@ class AppModule(val application: AppApplication) {
         return httpClient
     }
 
-/*    @Singleton
+    @Singleton
     @Provides
     @Named(DISPATCHER_IO)
     fun providesNetworkDispatcher(): CoroutineDispatcher {
         return Dispatchers.IO
-    }*/
+    }
+
+    @Singleton
+    @Provides
+    fun provideMachinesRepository(api: IApi, machinesDao: MachinesDao) : MachinesRepository {
+        return MachinesRepository(api, machinesDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMachineDao(appDatabase: AppDatabase) : MachinesDao {
+        return appDatabase.machinesDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideAppDatabase() : AppDatabase {
+        return AppDatabase.getInstance(application)
+    }
 }

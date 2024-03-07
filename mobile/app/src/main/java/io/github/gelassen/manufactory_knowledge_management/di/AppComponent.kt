@@ -10,11 +10,11 @@ import javax.inject.Singleton
     dependencies = [],
     modules = [
         AppModule::class,
+        ViewModelModule::class,
         InjectorModule::class
     ]
 )
 interface AppComponent {
-    fun inject(subj: MainActivity)
 
     fun inject(subject: AppApplication)
 

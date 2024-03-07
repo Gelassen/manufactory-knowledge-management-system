@@ -16,9 +16,6 @@ import io.github.gelassen.manufactory_knowledge_management.ui.MachineFragment
 abstract class InjectorModule {
 
     @ContributesAndroidInjector
-    abstract fun provideMainActivityInjector() : MainActivity
-
-    @ContributesAndroidInjector
     abstract fun provideMachineFragmentInjector() : MachineFragment
 
 }

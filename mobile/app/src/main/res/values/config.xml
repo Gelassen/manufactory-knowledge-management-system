@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- docker based endpoint -->
-    <string name="main_endpoint">172.18.254.1:8080</string>
+    <string name="main_endpoint">http://172.18.254.1:8080</string>
 </resources>

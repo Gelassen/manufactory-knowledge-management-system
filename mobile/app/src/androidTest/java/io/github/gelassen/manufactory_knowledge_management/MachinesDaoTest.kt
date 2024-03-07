@@ -3,11 +3,12 @@ package io.github.gelassen.manufactory_knowledge_management
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import io.github.gelassen.manufactory_knowledge_management.di.AppModule
 import io.github.gelassen.manufactory_knowledge_management.model.Machine
 import io.github.gelassen.manufactory_knowledge_management.model.fromDomain
+import io.github.gelassen.manufactory_knowledge_management.repository.MachinesRepository
 import io.github.gelassen.manufactory_knowledge_management.storage.AppDatabase
 import io.github.gelassen.manufactory_knowledge_management.storage.dao.MachinesDao
-import io.github.gelassen.manufactory_knowledge_management.storage.repositories.MachinesRepository
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNull
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,10 +20,10 @@ import org.junit.Before
 import org.junit.Test
 import java.io.IOException
 
-
 class MachinesDaoTest {
     private lateinit var machinesDao: MachinesDao
     private lateinit var db: AppDatabase
+    private lateinit var subj: MachinesRepository
 
     @Before
     fun createDb() {
@@ -33,6 +34,12 @@ class MachinesDaoTest {
         )
             .build()
         machinesDao = db.machinesDao()
+
+        val appModule = AppModule(context as AppApplication)
+        subj = MachinesRepository(
+            api = appModule.providesApi(appModule.providesOkHttpClient()),
+            machinesDao = machinesDao
+        )
     }
 
     @After
@@ -46,12 +53,11 @@ class MachinesDaoTest {
     @Throws(Exception::class)
     fun getMachineByBarcode_withValidBarcodeAndStorage_receivesValidResponse() = runTest {
         val barcodes = arrayOf("123bqwqasd", "098234jkfwje0")
-        val machineRepository = MachinesRepository(machinesDao)
         val dataset = getStubMachines(*barcodes)
         launch { machinesDao.saveMachine(*dataset.map { it.fromDomain() }.toTypedArray()) }
         advanceUntilIdle()
 
-        val result = machineRepository.getMachineByUniqueIdentifier(barcodes[0])
+        val result = subj.getMachineByUniqueIdentifier(barcodes[0])
 
         assertEquals(dataset[0].name, result!!.name)
         assertEquals(dataset[0].breakdowns, result.breakdowns)
@@ -62,16 +68,13 @@ class MachinesDaoTest {
     @Throws(Exception::class)
     fun getMachineByBarcode_withNOTValidBarcodeAndStorage_receivesValidResponse() = runTest {
         val barcodes = arrayOf("123bqwqasd", "098234jkfwje0")
-        val machineRepository = MachinesRepository(machinesDao)
         val dataset = getStubMachines(*barcodes)
         launch { machinesDao.saveMachine(*dataset.map { it.fromDomain() }.toTypedArray()) }
         advanceUntilIdle()
 
-        val result = machineRepository.getMachineByUniqueIdentifier("not-valid-barcode")
+        val result = subj.getMachineByUniqueIdentifier("not-valid-barcode")
 
         assertNull(result)
-//        assertEquals(dataset.get(0).name, result.name)
-//        assertEquals(dataset.get(0).breakdowns, result.breakdowns)
     }
 
     companion object Utils {
@@ -82,6 +85,7 @@ class MachinesDaoTest {
                 Machine(0L, "Fanuc 2000", "Fanuc", barcodes[1])
             )
         }
+
     }
 
 }

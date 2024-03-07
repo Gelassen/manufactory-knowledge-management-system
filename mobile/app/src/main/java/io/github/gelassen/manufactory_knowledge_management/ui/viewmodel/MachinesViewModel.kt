@@ -3,7 +3,7 @@ package io.github.gelassen.manufactory_knowledge_management.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.gelassen.manufactory_knowledge_management.model.Machine
-import io.github.gelassen.manufactory_knowledge_management.storage.repositories.MachinesRepository
+import io.github.gelassen.manufactory_knowledge_management.repository.MachinesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +26,7 @@ class MachinesViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Eagerly, state.value)
 
     suspend fun fetchMachinesByBarcode(machineId: String) {
-        machinesRepository.getMachineByUniqueIdentifier(machineId)
+//        machinesRepository.getMachineByUniqueIdentifier(machineId)
 
     }
 
