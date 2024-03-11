@@ -28,7 +28,7 @@ class AppModule(val application: AppApplication) {
     @Singleton
     @Provides
     fun providesApi(httpClient: OkHttpClient) : IApi {
-        val url = application.getString(R.string.main_endpoint)
+        val url = application.getString(R.string.dev_machine_endpoint)
         val retrofit = Retrofit.Builder()
 //            .addConverterFactory(GsonConverterFactory.create(customGson))
             .addConverterFactory(GsonConverterFactory.create())

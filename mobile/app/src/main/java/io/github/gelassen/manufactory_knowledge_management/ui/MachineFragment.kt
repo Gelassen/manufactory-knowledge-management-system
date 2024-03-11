@@ -7,14 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import dagger.android.support.AndroidSupportInjection
 import io.github.gelassen.manufactory_knowledge_management.App
 import io.github.gelassen.manufactory_knowledge_management.R
 import io.github.gelassen.manufactory_knowledge_management.di.ViewModelFactory
 import io.github.gelassen.manufactory_knowledge_management.di.ViewModelModule
 import io.github.gelassen.manufactory_knowledge_management.ui.viewmodel.MachinesViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
@@ -58,13 +61,36 @@ class MachineFragment : Fragment() {
         setFragmentResultListener(EXTRA_MACHINE_ID) { requestKey, bundle ->
             val machineIdFromBarcode = bundle.getString(MACHINE_ID)
             Log.d(App.TAG, "Receive machine id $machineIdFromBarcode")
-            fetchMachinesByBarcode(machineId = machineIdFromBarcode!!)
+            lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    launch {
+                        viewModel.fetchMachineByBarcode(machineIdFromBarcode.toString())
+                    }
+                }
+
+                launch {
+                    viewModel.onStart(machineIdFromBarcode.toString())
+                }
+            }
+        }
+        subscribeOnUpdates()
+    }
+
+    private fun subscribeOnUpdates() {
+        lifecycleScope.launch {
+            viewModel.uiState.collectLatest { it ->
+                Log.d(App.TAG, "Machine by barcode ${it.machine?.name ?: "machine is null"}")
+            }
         }
     }
 
-    private fun fetchMachinesByBarcode(machineId: String) {
-        lifecycleScope.launch {
+    private suspend fun fetchMachinesByBarcode(machineId: String) {
+/*        lifecycleScope.launch {
             // TODO complete me
-        }
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+
+            }
+
+        }*/
     }
 }

@@ -3,6 +3,7 @@ package io.github.gelassen.manufactory_knowledge_management.ui
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
+import io.github.gelassen.manufactory_knowledge_management.App
 import io.github.gelassen.manufactory_knowledge_management.R
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -115,6 +117,7 @@ class ScannerFragment: Fragment() {
     }
 
     private fun onSuccessfulBarcodeScan(barcodeResults: MutableList<Barcode>) {
+        Log.d(App.TAG, "[start] onSuccessfulBarcodeScan(${barcodeResults[0].rawValue})")
         Toast.makeText(
             requireActivity(),
             "QR code is scanned ${barcodeResults[0].rawValue}",

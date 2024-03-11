@@ -2,4 +2,6 @@
 <resources>
     <!-- docker based endpoint -->
     <string name="main_endpoint">http://172.18.254.1:8080</string>
+    <!-- dev machine endpoint from a real device -->
+    <string name="dev_machine_endpoint">http://192.168.1.19:8080</string>
 </resources>
