@@ -66,11 +66,12 @@ class MachineFragment : Fragment() {
                     launch {
                         viewModel.fetchMachineByBarcode(machineIdFromBarcode.toString())
                     }
+                    launch {
+                        viewModel.onStart(machineIdFromBarcode.toString())
+                    }
                 }
 
-                launch {
-                    viewModel.onStart(machineIdFromBarcode.toString())
-                }
+
             }
         }
         subscribeOnUpdates()
