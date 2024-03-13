@@ -17,7 +17,7 @@ import io.github.gelassen.manufactory_knowledge_management.R
 import io.github.gelassen.manufactory_knowledge_management.di.ViewModelFactory
 import io.github.gelassen.manufactory_knowledge_management.di.ViewModelModule
 import io.github.gelassen.manufactory_knowledge_management.ui.viewmodel.MachinesViewModel
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
@@ -63,35 +63,40 @@ class MachineFragment : Fragment() {
             Log.d(App.TAG, "Receive machine id $machineIdFromBarcode")
             lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    launch {
-                        viewModel.fetchMachineByBarcode(machineIdFromBarcode.toString())
-                    }
+                    subscribeOnUpdates(this)
                     launch {
                         viewModel.onStart(machineIdFromBarcode.toString())
+                    }
+                    launch {
+                        viewModel.fetchMachineByBarcode(machineIdFromBarcode.toString())
                     }
                 }
 
 
             }
         }
-        subscribeOnUpdates()
     }
 
-    private fun subscribeOnUpdates() {
-        lifecycleScope.launch {
-            viewModel.uiState.collectLatest { it ->
-                Log.d(App.TAG, "Machine by barcode ${it.machine?.name ?: "machine is null"}")
+    private fun subscribeOnUpdates(coroutineScope: CoroutineScope) {
+        coroutineScope.launch {
+            viewModel.uiState.collect { it ->
+                Log.d(App.TAG, "Machine viewModel.uiState.collect is triggered")
+                if (it.isLoading) {
+                    // TODO show progress indicator
+                    Log.d(App.TAG, "Show loading")
+                } else {
+                    // TODO hide progress indicator
+                }
+                if (it.machine != null) {
+                    Log.d(App.TAG, "Show machine ${it.machine.name}")
+                    // TODO complete me
+                }
+                if (it.errors.isNotEmpty()) {
+                    // TODO show error
+                    Log.e(App.TAG, "Show error ${it.errors[0]}")
+                }
             }
         }
     }
 
-    private suspend fun fetchMachinesByBarcode(machineId: String) {
-/*        lifecycleScope.launch {
-            // TODO complete me
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-
-            }
-
-        }*/
-    }
 }

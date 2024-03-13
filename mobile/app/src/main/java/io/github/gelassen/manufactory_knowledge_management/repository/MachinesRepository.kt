@@ -9,6 +9,8 @@ import io.github.gelassen.manufactory_knowledge_management.network.model.Respons
 import io.github.gelassen.manufactory_knowledge_management.network.model.toApiResponse
 import io.github.gelassen.manufactory_knowledge_management.storage.dao.MachinesDao
 import io.github.gelassen.manufactory_knowledge_management.storage.model.toDomain
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class MachinesRepository @Inject constructor(
@@ -16,8 +18,10 @@ class MachinesRepository @Inject constructor(
     var machinesDao: MachinesDao
 ) : IMachinesRepository {
 
-    override suspend fun getCachedMachineByBarcode(barcode: String): Machine?
-        = machinesDao.getMachineByBarcode(barcode)?.toDomain()
+    override fun getCachedMachineByBarcode(barcode: String): Flow<Machine?> {
+        return machinesDao.getMachineByBarcodeFlow(barcode)
+            .map { it?.toDomain() }
+    }
 
     override suspend fun fetchMachineByBarcode(barcode: String): Response<Machine> {
         lateinit var result: Response<Machine>
@@ -37,10 +41,6 @@ class MachinesRepository @Inject constructor(
             machinesDao.saveMachine(result.data.asEntity())
         }
         return result
-    }
-
-    override suspend fun saveMachine(machine: Machine): List<Long> {
-        return machinesDao.saveMachine(machine.asEntity())
     }
 
     override suspend fun getMachineByUniqueIdentifier(barcode: String): Machine? {

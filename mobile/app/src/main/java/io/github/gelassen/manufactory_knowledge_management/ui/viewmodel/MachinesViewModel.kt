@@ -31,15 +31,26 @@ class MachinesViewModel @Inject constructor(
 
     suspend fun onStart(barcode: String) {
         Log.d(App.TAG, "[start] onStart($barcode)")
-        state.update { state -> state.copy(isLoading = true) }
-        val machine = machinesRepository.getCachedMachineByBarcode(barcode)
-        state.update { state -> state.copy(machine = machine, isLoading = false) }
+        machinesRepository.getCachedMachineByBarcode(barcode)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(0L),
+                initialValue = null
+            )
+            .collect { it ->
+                Log.d(App.TAG, "[view-model] onStart($barcode) collect is triggered")
+                if (it == null) return@collect
+                state.update { state ->
+                    state.copy(machine = it)
+                }
+            }
     }
 
     suspend fun fetchMachineByBarcode(barcode: String) {
         Log.d(App.TAG, "[start] fetchMachineByBarcode($barcode)")
         when(val response = machinesRepository.fetchMachineByBarcode(barcode)) {
             is Response.Error.Message -> {
+                Log.d(App.TAG, "[view-model] fetchMachineByBarcode($barcode) error message callback")
                 state.update { state ->
                     state.copy(
                         errors = state.errors.plus(response.msg),
@@ -47,7 +58,9 @@ class MachinesViewModel @Inject constructor(
                     )
                 }
             }
-            else -> { /* no op */ }
+            else -> { /* no op */
+                Log.d(App.TAG, "[view-model] fetchMachineByBarcode($barcode) default callback")
+            }
         }
     }
 
