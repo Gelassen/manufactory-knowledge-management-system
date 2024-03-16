@@ -36,6 +36,7 @@ class ScannerFragment: Fragment() {
 
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var barcodeScanner: BarcodeScanner
+    private var isNavigationTriggeredAlready = false
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -128,8 +129,11 @@ class ScannerFragment: Fragment() {
             MachineFragment.EXTRA_MACHINE_ID,
             bundleOf(MachineFragment.MACHINE_ID to barcodeResults[0].rawValue)
         )
-        val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-        navController.navigate(R.id.action_scanner_to_machines)
+        if (!isNavigationTriggeredAlready) {
+            isNavigationTriggeredAlready = true
+            val navController = requireActivity().findNavController(R.id.nav_host_fragment)
+            navController.navigate(R.id.action_scanner_to_machines)
+        }
     }
 
     companion object {
