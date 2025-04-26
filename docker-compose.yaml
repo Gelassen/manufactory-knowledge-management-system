@@ -1,0 +1,54 @@
+services:
+  server:
+    hostname: knowledge-management-server
+    container_name: knowledge-management-server
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    networks:
+      - priv-knowledge-system-net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  openapi-generator-backend:
+    image: openapitools/openapi-generator-cli:v7.1.0
+    container_name: openapi-generator-backend
+    volumes:
+      - ./common/openapi/openapi.yaml:/local/openapi/openapi.yaml
+      - ./backend/generated:/local/generated
+    networks:
+      - priv-knowledge-system-net
+    command: > 
+      generate 
+      -i /local/openapi/openapi.yaml 
+      -g kotlin-spring 
+      -o /local/generated/backend
+      -p gradleBuildFile=true,basePackageName=io.github.gelassen.manufactory_knowledge_management.generated
+
+  openapi-generator-web:
+    image: openapitools/openapi-generator-cli:v7.1.0
+    container_name: openapi-generator-web
+    volumes:
+      - ./common/openapi/openapi.yaml:/local/openapi/openapi.yaml
+      - ./web/generated:/local/generated
+    networks:
+      - priv-knowledge-system-net
+    command: >
+      generate
+      -i /local/openapi/openapi.yaml
+      -g typescript-axios
+      -o /local/generated
+      --additional-properties=useSingleRequestParameter=true,supportsES6=true,withSeparateModelsAndApi=true,modelPackage=models,apiPackage=api,typescriptThreePlus=true 
+      -o /local/generated
+      -p basePackage=io.github.gelassen.manufactory_knowledge_management.generated
+
+networks:
+  priv-knowledge-system-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.254.0/28

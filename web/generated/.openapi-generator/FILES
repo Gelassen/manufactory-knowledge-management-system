@@ -1,0 +1,13 @@
+.gitignore
+.npmignore
+api.ts
+api/default-api.ts
+base.ts
+common.ts
+configuration.ts
+git_push.sh
+index.ts
+models/api-response-machine.ts
+models/api-response-message.ts
+models/index.ts
+models/machine.ts

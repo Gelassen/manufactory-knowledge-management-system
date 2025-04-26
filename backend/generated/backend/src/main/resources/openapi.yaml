@@ -1,0 +1,68 @@
+openapi: 3.0.0
+info:
+  title: Machine API
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /api/v1/machine:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: barcode
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseMachine'
+          description: Machine found
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseMessage'
+          description: Machine not found
+      summary: Get a machine by barcode
+components:
+  schemas:
+    ApiResponseMachine:
+      example:
+        data:
+          name: name
+          id: id
+          status: status
+        message: message
+      properties:
+        data:
+          $ref: '#/components/schemas/Machine'
+        message:
+          nullable: true
+          type: string
+      type: object
+    ApiResponseMessage:
+      properties:
+        data:
+          nullable: true
+          type: "null"
+        message:
+          type: string
+      type: object
+    Machine:
+      example:
+        name: name
+        id: id
+        status: status
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+      type: object
