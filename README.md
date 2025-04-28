@@ -28,7 +28,7 @@ $ sudo apt install nodejs
 $ sudo apt install npm
 $ node -v
 $ npm -v
-$ npm install axios
+$ npm install
 ```
 
 ## Common

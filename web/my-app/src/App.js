@@ -1,80 +1,127 @@
 import React, { useState } from 'react';
+import { Button, TextField, Typography, Grid, CircularProgress, Paper, Box, List, ListItem, ListItemText } from '@mui/material';
 import axios from 'axios';
-import config from './config';  // Import configuration file
+import config from './config';
 
 function MachineDetails() {
-  const [barcode, setBarcode] = useState('');  // State to hold the barcode value
-  const [machine, setMachine] = useState(null);  // State to hold the machine object
-  const [loading, setLoading] = useState(false);  // Loading indicator state
-  const [error, setError] = useState(null);  // Error state
+  const [barcode, setBarcode] = useState('');
+  const [machine, setMachine] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Function to handle the API request based on barcode
+  // Fetch machine data by barcode
   const fetchMachineData = () => {
     if (!barcode) {
       setError('Please enter a barcode');
       return;
     }
 
-    setLoading(true);  // Set loading to true
-    setError(null);    // Clear errors
+    setLoading(true);
+    setError(null);
 
-    // Sending the API request with the barcode parameter
-    axios.get(`${config.API_URL}/machine?barcode=${barcode}`)
+    axios
+      .get(`${config.API_URL}/machine?barcode=${barcode}`)
       .then((response) => {
-        const machineData = response.data.data; // Extract the machine data from the response
-        setMachine(machineData);  // Set the machine data
-        setLoading(false);  // Set loading to false
+        setMachine(response.data.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
         setError('Failed to fetch machine data');
-        setLoading(false);  // Set loading to false in case of error
+        setLoading(false);
       });
   };
 
   return (
-    <div>
-      <h1>Machine Details</h1>
-      
-      {/* Input field for barcode */}
-      <input
-        type="text"
-        placeholder="Enter machine barcode"
-        value={barcode}
-        onChange={(e) => setBarcode(e.target.value)}  // Update barcode state on input change
-      />
-      <button onClick={fetchMachineData}>Fetch Machine</button>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        bgcolor: 'background.default',
+        padding: '20px',
+      }}
+    >
+      <Paper sx={{ padding: 4, width: '100%', maxWidth: 600 }}>
+        <Typography variant="h4" gutterBottom>
+          Machine Details
+        </Typography>
 
-      {/* Display loading state */}
-      {loading && <div>Loading...</div>}
-      
-      {/* Display error message if any */}
-      {error && <div>{error}</div>}
+        <TextField
+          label="Enter machine barcode"
+          variant="outlined"
+          fullWidth
+          value={barcode}
+          onChange={(e) => setBarcode(e.target.value)}
+          sx={{ marginBottom: 2 }}
+        />
 
-      {/* Display machine data if available */}
-      {machine && (
-        <div>
-          <p><strong>Name:</strong> {machine.name}</p>
-          <p><strong>Manufacturer:</strong> {machine.manufacturer}</p>
-          <p><strong>Barcode:</strong> {machine.barcode}</p>
-          
-          <h3>Breakdowns:</h3>
-          <ul>
-            {machine.breakdowns && machine.breakdowns.length > 0 ? (
-              machine.breakdowns.map((breakdown) => (
-                <li key={breakdown.id}>
-                  <strong>Failure:</strong> {breakdown.failure}
-                  <p><strong>Solution:</strong> {breakdown.solution}</p>
-                  <p><strong>Date:</strong> {new Date(breakdown.dateTime).toLocaleString()}</p>
-                </li>
-              ))
-            ) : (
-              <p>No breakdowns available.</p>
-            )}
-          </ul>
-        </div>
-      )}
-    </div>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={fetchMachineData}
+          sx={{ marginBottom: 2 }}
+        >
+          Fetch Machine
+        </Button>
+
+        {/* Display loading spinner */}
+        {loading && (
+          <Box display="flex" justifyContent="center" sx={{ marginBottom: 2 }}>
+            <CircularProgress />
+          </Box>
+        )}
+
+        {/* Display error message */}
+        {error && (
+          <Typography variant="body1" color="error" sx={{ marginBottom: 2 }}>
+            {error}
+          </Typography>
+        )}
+
+        {/* Display machine data */}
+        {machine && (
+          <Box>
+            <Typography variant="h6" gutterBottom>
+              <strong>Name:</strong> {machine.name}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Manufacturer:</strong> {machine.manufacturer}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Barcode:</strong> {machine.barcode}
+            </Typography>
+
+            <Typography variant="h6" sx={{ marginTop: 2 }}>
+              Breakdowns:
+            </Typography>
+            <List>
+              {machine.breakdowns && machine.breakdowns.length > 0 ? (
+                machine.breakdowns.map((breakdown) => (
+                  <ListItem key={breakdown.id}>
+                    <ListItemText
+                      primary={<strong>{breakdown.failure}</strong>}
+                      secondary={
+                        <>
+                          <Typography variant="body2">{breakdown.solution}</Typography>
+                          <Typography variant="body2">
+                            <strong>Date:</strong> {new Date(breakdown.dateTime).toLocaleString()}
+                          </Typography>
+                        </>
+                      }
+                    />
+                  </ListItem>
+                ))
+              ) : (
+                <Typography variant="body1">No breakdowns available.</Typography>
+              )}
+            </List>
+          </Box>
+        )}
+      </Paper>
+    </Box>
   );
 }
 
