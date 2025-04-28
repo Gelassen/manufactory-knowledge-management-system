@@ -1,11 +1,17 @@
-/.gradle/
-/build/
-/out/
-/target/
-!.mvn/wrapper/maven-wrapper.jar
-/backend/.gradle/
+# General build directories
+.gradle/
+.build/
+out/
+target/
 
-### STS ###
+# Maven wrapper
+!.mvn/wrapper/maven-wrapper.jar
+
+# Backend build directories
+/backend/.gradle/
+backend/build/*
+
+# STS (Spring Tool Suite)
 .apt_generated
 .classpath
 .factorypath
@@ -14,17 +20,35 @@
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
+# IntelliJ IDEA
 .idea
 *.iws
 *.iml
 *.ipr
 /backend/build/*
 
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /build/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
+
+# Web client specific build artifacts (Add any build artifacts related to your web client here if necessary)
+web/build/
+web/dist/
+web/node_modules/
+web/.next/
+web/.webpack/
+web/.vscode/
+
+# IDE-specific files for web client
+# Visual Studio Code settings
+web/.vscode/
+
+# NPM/Yarn dependencies
+node_modules/
+
+# Optional: .env file for sensitive configuration (if used)
+web/.env

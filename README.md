@@ -13,16 +13,26 @@ $ docker-compose run --rm openapi-generator-web
 
 ```
 
+Start web client:
+```
+$ npm start
+```
+
 # Development
 
 ## Web client
 
 ### Setup
 ```
+$ sudo apt install nodejs
+$ sudo apt install npm
+$ node -v
+$ npm -v
 $ npm install axios
 ```
 
 ## Common
 
 ### Setup
+```
 ```
