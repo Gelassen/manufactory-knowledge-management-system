@@ -14,20 +14,27 @@ services:
       - ./database/postgres-data:/var/lib/postgresql/data
       - ./database/scripts:/docker-entrypoint-initdb.d
 
-  # server:
-  #   hostname: knowledge-management-server
-  #   container_name: knowledge-management-server
-  #   build:
-  #     context: ./backend
-  #   ports:
-  #     - "8080:8080"
-  #   networks:
-  #     - priv-knowledge-system-net
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         cpus: '0.5'
-  #         memory: 512M
+    networks:
+      priv-knowledge-system-net:
+        ipv4_address: 172.18.254.2
+
+  server:
+    hostname: knowledge-management-server
+    container_name: knowledge-management-server
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    networks:
+      priv-knowledge-system-net:
+        ipv4_address: 172.18.254.3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    depends_on: 
+      - database
 
   # openapi-generator-backend:
   #   image: openapitools/openapi-generator-cli:v7.1.0

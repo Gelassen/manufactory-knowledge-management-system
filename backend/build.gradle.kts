@@ -26,6 +26,8 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 
+	implementation("org.postgresql:postgresql")
+
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	implementation("com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:1.9.1")
 

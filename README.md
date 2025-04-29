@@ -48,5 +48,6 @@ $ \d
 
 ## Cleanup
 ```
-docker system prune -a --volumes -f
+$ sudo rm -R /backend/postgres-data
+$ docker system prune -a --volumes -f
 ```

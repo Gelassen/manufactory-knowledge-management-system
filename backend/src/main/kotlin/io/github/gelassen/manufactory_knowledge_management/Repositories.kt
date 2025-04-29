@@ -2,13 +2,14 @@ package io.github.gelassen.manufactory_knowledge_management
 
 import io.github.gelassen.manufactory_knowledge_management.model.Breakdown
 import io.github.gelassen.manufactory_knowledge_management.model.Machine
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.NoRepositoryBean
 import org.springframework.data.repository.Repository
 
 
 @NoRepositoryBean
-interface CustomMachinesRepository : Repository<Machine, Long> {
+interface CustomMachinesRepository : JpaRepository<Machine, Long> {
     fun findMachineByBarcode(barcode: String) : Machine?
 }
 
