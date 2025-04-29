@@ -10,6 +10,9 @@ import org.springframework.data.repository.Repository
 
 @NoRepositoryBean
 interface CustomMachinesRepository : JpaRepository<Machine, Long> {
+
+    fun getAllMachines() : List<Machine>
+
     fun findMachineByBarcode(barcode: String) : Machine?
 }
 

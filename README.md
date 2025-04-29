@@ -50,4 +50,5 @@ $ \d
 ```
 $ sudo rm -R /backend/postgres-data
 $ docker system prune -a --volumes -f
+$ docker-compose down -v # stops containers AND remove volumes
 ```
