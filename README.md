@@ -36,3 +36,17 @@ $ npm install
 ### Setup
 ```
 ```
+
+## Database
+
+Manual operations with database:
+```
+$ docker exec -it postgres-db /bin/sh
+$ psql -U myuser -d mydb
+$ \d
+```
+
+## Cleanup
+```
+docker system prune -a --volumes -f
+```
