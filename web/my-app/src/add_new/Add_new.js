@@ -2,10 +2,11 @@ import React from "react";
 import {
     useNavigate,
 } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+// import { Button } from "@/components/ui/button";
+// import { Card, CardContent } from "@/components/ui/card";
+// import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
+import { Button, Menu, MenuItem, Typography, Card, TextField, InputLabel } from "@mui/material";
 
 const AddMachine = () => {
     const navigate = useNavigate();
@@ -22,16 +23,16 @@ const AddMachine = () => {
         <Card className="p-6 max-w-lg mx-auto">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" required />
+              <InputLabel htmlFor="name">Name</InputLabel>
+              <TextField id="name" required />
             </div>
             <div>
-              <Label htmlFor="manufacturer">Manufacturer</Label>
-              <Input id="manufacturer" required />
+              <InputLabel htmlFor="manufacturer">Manufacturer</InputLabel>
+              <TextField id="manufacturer" required />
             </div>
             <div>
-              <Label htmlFor="barcode">Barcode</Label>
-              <Input id="barcode" required />
+              <InputLabel htmlFor="barcode">Barcode</InputLabel>
+              <TextField id="barcode" required />
             </div>
             <Button type="submit" className="w-full">
               Submit
@@ -41,4 +42,6 @@ const AddMachine = () => {
       </div>
     );
   };
+
+  export default AddMachine
   
