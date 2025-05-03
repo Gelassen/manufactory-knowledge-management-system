@@ -17,6 +17,10 @@ class MachineService(private val repository: MachinesRepository) {
         return repository.findMachineByBarcode(barcode)
     }
 
+    fun getMachineById(id: Long) : Machine? {
+        return repository.findMachineById(id)
+    }
+
     fun saveMachine(data: MachineDTO) : Machine {
         val machineEntity = data.toEntity()
         return  repository.save(machineEntity)

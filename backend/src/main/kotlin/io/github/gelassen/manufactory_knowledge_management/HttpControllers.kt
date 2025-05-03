@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -28,20 +29,36 @@ class MachineController(
         return result
     }
 
-    @GetMapping
-    fun getMachineByBarcode(model: Model, @RequestParam barcode: String): ResponseEntity<ApiResponse<Machine>> {
-        val result: ResponseEntity<ApiResponse<Machine>>
+    @GetMapping("/barcode/{barcode}")
+    fun getMachineByBarcode(
+        @PathVariable barcode: String
+    ): ResponseEntity<ApiResponse<Machine>> {
         val machine = machineService.getMachineByBarcode(barcode)
-        if (machine != null) {
-            result = ResponseEntity(ApiResponse(machine), HttpStatus.OK)
+        return if (machine != null) {
+            ResponseEntity(ApiResponse(machine), HttpStatus.OK)
         } else {
-            result = ResponseEntity(
-                ApiResponse(message = "Machine with '$barcode' barcode does not exist. Did you send the right barcode?"),
+            ResponseEntity(
+                ApiResponse(message = "Machine with barcode '$barcode' not found."),
                 HttpStatus.NOT_FOUND
             )
         }
-        return result
     }
+
+    @GetMapping("/{id}")
+    fun getMachineById(
+        @PathVariable id: Long
+    ): ResponseEntity<ApiResponse<Machine>> {
+        val machine = machineService.getMachineById(id)
+        return if (machine != null) {
+            ResponseEntity(ApiResponse(machine), HttpStatus.OK)
+        } else {
+            ResponseEntity(
+                ApiResponse(message = "Machine with ID '$id' not found."),
+                HttpStatus.NOT_FOUND
+            )
+        }
+    }
+
 
     @PostMapping
     fun addMachine(@RequestBody machineDto: MachineDTO): ResponseEntity<Machine> {

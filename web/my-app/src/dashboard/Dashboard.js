@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { 
   Button, 
   Card, 
@@ -21,6 +22,8 @@ import axios from 'axios';
 import config from '../config';     
 
 const Dashboard = () => {
+
+  const navigate = useNavigate();
 
   const [machines, setMachines] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -50,13 +53,20 @@ const Dashboard = () => {
 
   const onMachineClick = (machine) => {
     console.log('Clicked machine:', machine);
-    // navigate or open modal here
+    navigate(`/machines/${machine.id}`);
   };
   
   const onAddNewClick = (machine) => {
     console.log('Add new for:', machine);
     // e.g., open form modal specific to this machine
   };
+
+  // TODO: add a grid of machines which have open breakdowns -- in repairing state
+  //    it supposed to be at the top of list with the rest of machines (paginated)
+
+  // TODO: list of items also should be paginated
+
+  // TODO: add search field to query a single machine by name
   
   return (
     <div>
