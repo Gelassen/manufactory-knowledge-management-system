@@ -4,13 +4,17 @@ import { ThemeProvider, createTheme, styled } from "@mui/material/styles";
 import { Button, Menu, MenuItem, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Dashboard from "../dashboard/Dashboard";
-import AddMachine from "../add_new/Add_new"
+import AddMachine from "../add-new/AddNew"
 
 // Create your theme
 const theme = createTheme(); 
 
 const Container = styled("div")(({ theme }) => ({
+  maxWidth: "40%",               // You can tweak this for responsiveness
+  marginLeft: "30%",             // 30% from the left
+  marginRight: "30%",            // 30% from the right
   padding: theme.spacing(2),
+  boxSizing: "border-box",       // ensures padding doesn’t overflow
 }));
 
 const Header = styled("header")(({ theme }) => ({
@@ -49,7 +53,7 @@ const App = () => {
         <Container>
           <Header>
             <Title variant="h5">
-              Machines Dashboard
+              Manufacture knowledge management system
             </Title>
             <Button 
               variant="outlined" 
@@ -64,11 +68,25 @@ const App = () => {
               open={open} // Control the visibility of the menu
               onClose={handleClose} // Close the menu when clicked outside
             >
-              <MenuItem component={Link} to="/">
+              <MenuItem 
+                component={Link} 
+                to="/"
+                onClick={() => {
+                  // setAnchorEl(null); // close the menu
+                  handleClose()
+                  console.log('Navigated to list');
+                }}>
                 List of machines
               </MenuItem>
 
-              <MenuItem component={Link} to="/new">
+              <MenuItem 
+                component={Link} 
+                to="/new"
+                onClick={() => {
+                  // setAnchorEl(null); // close the menu
+                  handleClose()
+                  console.log('Navigated to list');
+                }}>
                 Add new machine
               </MenuItem>
 

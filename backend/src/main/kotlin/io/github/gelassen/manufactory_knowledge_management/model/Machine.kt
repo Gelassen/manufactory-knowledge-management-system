@@ -7,7 +7,7 @@ import jakarta.persistence.*
  * To prevent infinite recursion use solutions described in this
  * publication @link https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
  * */
-@Entity(name = "Machines")
+@Entity(name = Machine.TABLE_NAME)
 data class Machine(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +20,9 @@ data class Machine(
     @OneToMany(mappedBy = "machine", fetch = FetchType.LAZY)
     @JsonManagedReference
     var breakdowns: MutableList<Breakdown> = mutableListOf()
-)
+) {
+
+    companion object {
+        const val TABLE_NAME = "Machines"
+    }
+}

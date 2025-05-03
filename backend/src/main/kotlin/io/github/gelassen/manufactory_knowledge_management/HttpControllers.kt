@@ -17,11 +17,10 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/machine")
 class MachineController(
-    private val repository: MachinesRepository,
     private val machineService: MachineService
 ) {
 
-    @GetMapping
+    @GetMapping("/all")
     fun getAllMachines(model: Model): ResponseEntity<ApiResponse<List<Machine>>> {
         val result: ResponseEntity<ApiResponse<List<Machine>>>
         val machines = machineService.getMachines()
