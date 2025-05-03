@@ -100,26 +100,61 @@ function MachineDetails() {
               Breakdowns:
             </Typography>
             <List>
-              {machine.breakdowns && machine.breakdowns.length > 0 ? (
-                machine.breakdowns.map((breakdown) => (
-                  <ListItem key={breakdown.id}>
-                    <ListItemText
-                      primary={<strong>{breakdown.failure}</strong>}
-                      secondary={
-                        <>
-                          <Typography variant="body2">{breakdown.solution}</Typography>
-                          <Typography variant="body2">
-                            <strong>Date:</strong> {format(new Date(breakdown.dateTime), 'yyyy-MM-dd HH:mm')}
-                          </Typography>
-                        </>
-                      }
-                    />
-                  </ListItem>
-                ))
-              ) : (
-                <Typography variant="body1">No breakdowns available.</Typography>
-              )}
+                {machine.breakdowns?.length > 0 ? (
+                    machine.breakdowns.map((breakdown) => (
+                    <ListItem
+                        key={breakdown.id}
+                        sx={{
+                        mb: 2,
+                        p: 2,
+                        border: '1px solid #ccc',
+                        borderRadius: 2,
+                        position: 'relative',
+                        cursor: 'pointer',
+                        '&:hover': {
+                            backgroundColor: 'action.hover',
+                        },
+                        }}
+                    >
+                        <ListItemText
+                        primary={
+                            <strong>{breakdown.failure}</strong>
+                        }
+                        secondary={
+                            <>
+                            <Typography variant="body2">{breakdown.solution}</Typography>
+                            <br></br>
+                            <br></br>
+                            <Typography variant="body2">
+                                <strong>Date:</strong> {format(new Date(breakdown.dateTime), 'yyyy-MM-dd HH:mm')}
+                            </Typography>
+                            </>
+                        }
+                        slotProps={{
+                            primary: { component: 'div', variant: 'h6' },
+                            secondary: { component: 'div' },
+                        }}
+                        />
+
+                        {/* Breakdown count at bottom-right */}
+                        <Typography
+                        variant="caption"
+                        sx={{
+                            position: 'absolute',
+                            bottom: 8,
+                            right: 12,
+                            fontWeight: 'bold',
+                        }}
+                        >
+                        {machine.breakdowns.length} breakdowns
+                        </Typography>
+                    </ListItem>
+                    ))
+                ) : (
+                    <Typography variant="body1">No breakdowns available.</Typography>
+                )}
             </List>
+
           </Box>
         )}
       </Paper>
