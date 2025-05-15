@@ -1,7 +1,9 @@
 package io.github.gelassen.manufactory_knowledge_management
 
 import io.github.gelassen.manufactory_knowledge_management.model.ApiResponse
+import io.github.gelassen.manufactory_knowledge_management.model.Breakdown
 import io.github.gelassen.manufactory_knowledge_management.model.Machine
+import io.github.gelassen.manufactory_knowledge_management.model.request.BreakdownDTO
 import io.github.gelassen.manufactory_knowledge_management.model.request.MachineDTO
 import io.github.gelassen.manufactory_knowledge_management.services.MachineService
 import org.springframework.http.HttpStatus
@@ -60,10 +62,22 @@ class MachineController(
     }
 
 
-    @PostMapping
+    @PostMapping()
     fun addMachine(@RequestBody machineDto: MachineDTO): ResponseEntity<Machine> {
         val saved = machineService.saveMachine(machineDto)
         return ResponseEntity.ok(saved)
+    }
+
+    @PostMapping("/{id}/breakdowns")
+    fun addBreakdown(
+        @PathVariable id: Long,
+        @RequestBody breakdownDto: BreakdownDTO
+    ): ResponseEntity<Machine> {
+        val updatedMachine = machineService.addBreakdown(
+            machineId = id,
+            breakdownDto = breakdownDto
+        )
+        return ResponseEntity.ok(updatedMachine)
     }
 
 }

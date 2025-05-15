@@ -6,6 +6,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Dashboard from "../dashboard/Dashboard";
 import AddMachine from "../add-new/AddNew"
 import MachineDetails from '../details/Details';
+import AddBreakdown from '../add-new/AddNewBreakdown';
 
 // Create your theme
 const theme = createTheme(); 
@@ -42,6 +43,10 @@ const App = () => {
       setAnchorEl(event.currentTarget); // Sets the button as the anchor element
       setOpen(true); // Opens the menu
     };
+
+    const handleHeaderClick = (event) => {
+      
+    }
   
     // Close the menu when clicked outside or on a menu item
     const handleClose = () => {
@@ -53,9 +58,11 @@ const App = () => {
       <Router>
         <Container>
           <Header>
-            <Title variant="h5">
-              Manufacture knowledge management system
-            </Title>
+            <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+              <Title variant="h5">
+                Manufacture knowledge management system
+              </Title>
+            </Link>
             <Button 
               variant="outlined" 
               aria-controls="menu" 
@@ -82,7 +89,7 @@ const App = () => {
 
               <MenuItem 
                 component={Link} 
-                to="/new"
+                to="/machines/new"
                 onClick={() => {
                   // setAnchorEl(null); // close the menu
                   handleClose()
@@ -96,8 +103,9 @@ const App = () => {
 
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/new" element={<AddMachine />} />
+            <Route path="/machines/new" element={<AddMachine />} />
             <Route path="/machines/:id" element={<MachineDetails />} />
+            <Route path="/machines/:machineId/breakdowns" element={<AddBreakdown />} />
           </Routes>
         </Container>
       </Router>

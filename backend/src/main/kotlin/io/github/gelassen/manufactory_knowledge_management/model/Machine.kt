@@ -17,7 +17,12 @@ data class Machine(
     var manufacturer: String,
     var barcode: String,
 
-    @OneToMany(mappedBy = "machine", fetch = FetchType.LAZY)
+    @OneToMany(
+        mappedBy = "machine",
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true,
+        fetch = FetchType.LAZY
+    )
     @JsonManagedReference
     var breakdowns: MutableList<Breakdown> = mutableListOf()
 ) {

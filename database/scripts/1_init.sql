@@ -8,7 +8,8 @@ CREATE TABLE machines (
 
 CREATE TABLE breakdowns (
     breakdown_id SERIAL PRIMARY KEY,
-    failure VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    failure VARCHAR(5000) NOT NULL,
     solution VARCHAR(5000) NOT NULL,
     date_time BIGINT NOT NULL,
     machine_id INTEGER REFERENCES machines(machine_id) ON DELETE SET NULL

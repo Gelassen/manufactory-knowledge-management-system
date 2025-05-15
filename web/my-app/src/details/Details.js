@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
-    Button, 
-    Card, 
-    Menu, 
-    MenuItem, 
     Typography, 
     Box, 
     Paper,
-    IconButton,
-    TextField, 
     CircularProgress, 
     List, 
     ListItem, 
@@ -60,9 +54,10 @@ function MachineDetails() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: '100vh',
         bgcolor: 'background.default',
-        padding: '20px',
+        p: 0,
+        m: 0,
+        mx: "auto",
       }}
     >
       <Paper sx={{ padding: 4, width: '100%', maxWidth: 600 }}>
@@ -118,10 +113,11 @@ function MachineDetails() {
                     >
                         <ListItemText
                         primary={
-                            <strong>{breakdown.failure}</strong>
+                            <Typography variant="body2">{breakdown.failure}</Typography>
                         }
                         secondary={
                             <>
+                            <br></br>
                             <Typography variant="body2">{breakdown.solution}</Typography>
                             <br></br>
                             <br></br>

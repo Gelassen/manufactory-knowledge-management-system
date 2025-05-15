@@ -58,7 +58,7 @@ const Dashboard = () => {
   
   const onAddNewClick = (machine) => {
     console.log('Add new for:', machine);
-    // e.g., open form modal specific to this machine
+    navigate(`/machines/${machine.id}/breakdowns`)
   };
 
   // TODO: add a grid of machines which have open breakdowns -- in repairing state

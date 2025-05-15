@@ -10,6 +10,8 @@ data class Breakdown(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "breakdown_id")
     var id: Long? = null,
+    var title: String,
+    @Column(length = 5000)
     var failure: String,
     @Column(length = 5000)
     var solution: String,
