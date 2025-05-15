@@ -1,14 +1,14 @@
 package io.github.gelassen.manufactory_knowledge_management
 
 import io.github.gelassen.manufactory_knowledge_management.model.ApiResponse
-import io.github.gelassen.manufactory_knowledge_management.model.Breakdown
 import io.github.gelassen.manufactory_knowledge_management.model.Machine
 import io.github.gelassen.manufactory_knowledge_management.model.request.BreakdownDTO
 import io.github.gelassen.manufactory_knowledge_management.model.request.MachineDTO
 import io.github.gelassen.manufactory_knowledge_management.services.MachineService
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -24,11 +24,19 @@ class MachineController(
 ) {
 
     @GetMapping("/all")
-    fun getAllMachines(model: Model): ResponseEntity<ApiResponse<List<Machine>>> {
-        val result: ResponseEntity<ApiResponse<List<Machine>>>
-        val machines = machineService.getMachines()
-        result = ResponseEntity(ApiResponse(machines), HttpStatus.OK)
-        return result
+    fun getAllMachines(
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") size: Int
+    ): ResponseEntity<ApiResponse<Map<String, Any>>> {
+        val pageable: Pageable = PageRequest.of(page, size)
+        val machinePage = machineService.getMachines(pageable)
+
+        val responseBody = mapOf(
+            "data" to machinePage.content,
+            "total" to machinePage.totalElements
+        )
+
+        return ResponseEntity(ApiResponse(responseBody), HttpStatus.OK)
     }
 
     @GetMapping("/barcode/{barcode}")

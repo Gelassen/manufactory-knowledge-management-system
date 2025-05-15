@@ -8,6 +8,8 @@ import io.github.gelassen.manufactory_knowledge_management.model.request.Machine
 import io.github.gelassen.manufactory_knowledge_management.model.request.toEntity
 import org.apache.logging.log4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import kotlin.math.log
@@ -18,8 +20,8 @@ class MachineService(private val repository: MachinesRepository) {
 
     val logger = LoggerFactory.getLogger(MachineService::class.java)
 
-    fun getMachines() : List<Machine> {
-        return repository.getAllMachines()
+    fun getMachines(pageable: Pageable): Page<Machine> {
+        return repository.findAll(pageable)
     }
 
     fun getMachineByBarcode(barcode: String) : Machine? {
