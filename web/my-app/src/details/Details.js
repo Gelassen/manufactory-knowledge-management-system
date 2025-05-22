@@ -1,157 +1,145 @@
 import React, { useState, useEffect } from 'react';
-import { 
-    Typography, 
-    Box, 
-    Paper,
-    CircularProgress, 
-    List, 
-    ListItem, 
-    ListItemText 
-  } from "@mui/material";
+import {
+  Typography,
+  Box,
+  Paper,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemText,
+  Pagination,
+  Divider,
+} from '@mui/material';
 import { format } from 'date-fns';
 import config from '../config';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-
 function MachineDetails() {
   const { id } = useParams();
-  
+
   const [machine, setMachine] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const cancelToken = axios.CancelToken.source();
+  const [breakdowns, setBreakdowns] = useState([]);
+  const [breakdownPage, setBreakdownPage] = useState(1);
+  const [totalBreakdownPages, setTotalBreakdownPages] = useState(1);
+  const pageSize = 3;
+
+  const fetchMachine = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${config.API_URL}/machine/${id}`);
+      setMachine(response.data.data);
+      setLoading(false);
+    } catch (err) {
+      setError('Failed to fetch machine data');
+      setLoading(false);
+    }
+  };
+
+  const fetchBreakdowns = async (page = 1) => {
+    try {
+      const response = await axios.get(`${config.API_URL}/machine/${id}/breakdowns`, {
+        params: { page: page - 1, size: pageSize },
+      });
+
+      const { data, total } = response.data.data;
+
+      setBreakdowns(data);
+      setTotalBreakdownPages(Math.ceil(total / pageSize));
+    } catch (err) {
+      console.error(err);
+      setError('Failed to fetch breakdowns');
+    }
+  };
 
   useEffect(() => {
-    const cancelToken = axios.CancelToken.source();
-    
-    axios
-      .get(`${config.API_URL}/machine/${id}`, {
-        cancelToken: cancelToken.token
-      })
-      .then((response) => {
-        setMachine(response.data.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        if (axios.isCancel(error)) {
-          console.log("Request canceled:", error.message);
-        } else {
-          setError('Failed to fetch machine data');
-          setLoading(false);
-        }
-      });
-  
-    return () => {
-      cancelToken.cancel("Component unmounted, request canceled");
-    };
-  }, [id]); 
+    fetchMachine();
+    fetchBreakdowns(breakdownPage);
+  }, [id, breakdownPage]);
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        bgcolor: 'background.default',
-        p: 0,
-        m: 0,
-        mx: "auto",
-      }}
-    >
-      <Paper sx={{ padding: 4, width: '100%', maxWidth: 600 }}>
+    <Box display="flex" justifyContent="center" p={2}>
+      <Paper sx={{ padding: 4, width: '100%', maxWidth: 700 }}>
         <Typography variant="h4" gutterBottom>
           Machine Details
         </Typography>
 
-
         {loading && !machine && (
-            <Box display="flex" justifyContent="center" sx={{ marginBottom: 2 }}>
-                <CircularProgress />
-            </Box>
+          <Box display="flex" justifyContent="center" mb={2}>
+            <CircularProgress />
+          </Box>
         )}
 
-        {error && !machine && (
-            <Typography variant="body1" color="error" sx={{ marginBottom: 2 }}>
-                {error}
-            </Typography>
+        {error && (
+          <Typography variant="body1" color="error" mb={2}>
+            {error}
+          </Typography>
         )}
 
-        {/* Display machine data */}
         {machine && (
-          <Box>
+          <>
             <Typography variant="h6" gutterBottom>
-              <strong>Name:</strong> {machine.name}
+              {machine.name}
             </Typography>
             <Typography variant="body1">
               <strong>Manufacturer:</strong> {machine.manufacturer}
             </Typography>
-            <Typography variant="body1">
+            <Typography variant="body1" mb={2}>
               <strong>Barcode:</strong> {machine.barcode}
             </Typography>
 
-            <Typography variant="h6" sx={{ marginTop: 2 }}>
-              Breakdowns:
+            <Divider sx={{ my: 2 }} />
+
+            <Typography variant="h6" gutterBottom>
+              Breakdowns
             </Typography>
-            <List>
-                {machine.breakdowns?.length > 0 ? (
-                    machine.breakdowns.map((breakdown) => (
+
+            {breakdowns.length > 0 ? (
+              <>
+                <List>
+                  {breakdowns.map((breakdown) => (
                     <ListItem
-                        key={breakdown.id}
-                        sx={{
+                      key={breakdown.id}
+                      sx={{
                         mb: 2,
                         p: 2,
-                        border: '1px solid #ccc',
+                        border: '1px solid #e0e0e0',
                         borderRadius: 2,
-                        position: 'relative',
-                        cursor: 'pointer',
-                        '&:hover': {
-                            backgroundColor: 'action.hover',
-                        },
-                        }}
+                        bgcolor: 'background.paper',
+                        boxShadow: 1,
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                      }}
                     >
-                        <ListItemText
-                        primary={
-                            <Typography variant="body2">{breakdown.failure}</Typography>
-                        }
-                        secondary={
-                            <>
-                            <br></br>
-                            <Typography variant="body2">{breakdown.solution}</Typography>
-                            <br></br>
-                            <br></br>
-                            <Typography variant="body2">
-                                <strong>Date:</strong> {format(new Date(breakdown.dateTime), 'yyyy-MM-dd HH:mm')}
-                            </Typography>
-                            </>
-                        }
-                        slotProps={{
-                            primary: { component: 'div', variant: 'h6' },
-                            secondary: { component: 'div' },
-                        }}
-                        />
-
-                        {/* Breakdown count at bottom-right */}
-                        <Typography
-                        variant="caption"
-                        sx={{
-                            position: 'absolute',
-                            bottom: 8,
-                            right: 12,
-                            fontWeight: 'bold',
-                        }}
-                        >
-                        {machine.breakdowns.length} breakdowns
-                        </Typography>
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        {breakdown.failure}
+                      </Typography>
+                      <Typography variant="body2" sx={{ mt: 1 }}>
+                        <strong>Solution:</strong> {breakdown.solution}
+                      </Typography>
+                      <Typography variant="caption" sx={{ mt: 1 }}>
+                        Date: {format(new Date(breakdown.dateTime), 'yyyy-MM-dd HH:mm')}
+                      </Typography>
                     </ListItem>
-                    ))
-                ) : (
-                    <Typography variant="body1">No breakdowns available.</Typography>
-                )}
-            </List>
+                  ))}
+                </List>
 
-          </Box>
+                <Box display="flex" justifyContent="center" mt={2}>
+                  <Pagination
+                    count={totalBreakdownPages}
+                    page={breakdownPage}
+                    onChange={(_, page) => setBreakdownPage(page)}
+                    color="primary"
+                  />
+                </Box>
+              </>
+            ) : (
+              <Typography variant="body1">No breakdowns available.</Typography>
+            )}
+          </>
         )}
       </Paper>
     </Box>

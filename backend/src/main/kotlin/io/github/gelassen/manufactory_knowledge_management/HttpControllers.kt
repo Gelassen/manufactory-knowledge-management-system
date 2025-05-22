@@ -93,4 +93,22 @@ class MachineController(
         return ResponseEntity.ok(updatedMachine)
     }
 
+    @GetMapping("/{id}/breakdowns")
+    fun getBreakdownsByMachine(
+        @PathVariable id: Long,
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "3") size: Int,
+    ): ResponseEntity<ApiResponse<Map<String, Any>>> {
+        val pageable: Pageable = PageRequest.of(page, size)
+        val breakdownsPage = machineService.getBreakdownsByMachine(pageable, id)
+
+        val responseBody = mapOf(
+            "data" to breakdownsPage.content,
+            "total" to breakdownsPage.totalElements
+        )
+
+        return ResponseEntity(ApiResponse(responseBody), HttpStatus.OK)
+    }
+
+
 }

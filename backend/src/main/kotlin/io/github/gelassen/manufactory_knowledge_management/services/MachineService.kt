@@ -6,9 +6,11 @@ import io.github.gelassen.manufactory_knowledge_management.model.Machine
 import io.github.gelassen.manufactory_knowledge_management.model.request.BreakdownDTO
 import io.github.gelassen.manufactory_knowledge_management.model.request.MachineDTO
 import io.github.gelassen.manufactory_knowledge_management.model.request.toEntity
+import jakarta.persistence.EntityNotFoundException
 import org.apache.logging.log4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -20,11 +22,11 @@ class MachineService(private val repository: MachinesRepository) {
 
     val logger = LoggerFactory.getLogger(MachineService::class.java)
 
-    fun getMachines(pageable: Pageable, text: String?, manufacturerText: String?): Page<Machine> {
-        return if (!text.isNullOrBlank()) {
+    fun getMachines(pageable: Pageable, name: String?, manufacturerText: String?): Page<Machine> {
+        return if (!name.isNullOrBlank()) {
             repository.findByNameContainingIgnoreCaseOrManufacturerContainingIgnoreCase(
-                name = text,
-                manufacturer=manufacturerText,
+                name = name,
+                manufacturer= manufacturerText,
                 pageable
             )
         } else {
@@ -54,5 +56,20 @@ class MachineService(private val repository: MachinesRepository) {
         logger.debug("MachineService::addBreakdown - machine after adding breakdown: {}", machine)
         return repository.save(machine)
     }
+
+    fun getBreakdownsByMachine(pageable: Pageable, machineId: Long): Page<Breakdown> {
+        val machine = repository.findById(machineId)
+            .orElseThrow { EntityNotFoundException("Machine with ID $machineId not found") }
+
+        val breakdowns = machine.breakdowns.sortedByDescending { it.dateTime } // or custom sort
+
+        val start = pageable.offset.toInt()
+        val end = (start + pageable.pageSize).coerceAtMost(breakdowns.size)
+
+        val content = if (start >= breakdowns.size) emptyList() else breakdowns.subList(start, end)
+
+        return PageImpl(content, pageable, breakdowns.size.toLong())
+    }
+
 
 }
