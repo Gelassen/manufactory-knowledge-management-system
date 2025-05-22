@@ -9,8 +9,11 @@ import {
   IconButton,
   Button,
   Pagination,
+  TextField,
+  InputAdornment,
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import config from '../config';
@@ -22,23 +25,26 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const [page, setPage] = useState(1); // Starts from 1 for Pagination component
-  const [pageSize] = useState(2);     // Page size fixed
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(2);
   const [totalPages, setTotalPages] = useState(1);
 
-  const fetchMachines = (pageNum = 1) => {
+  const [searchText, setSearchText] = useState('');
+  const [searchTextInput, setSearchTextInput] = useState('');
+
+  const fetchMachines = (pageNum = 1, text = '') => {
     setLoading(true);
     setError(null);
 
     axios
       .get(`${config.API_URL}/machine/all`, {
         params: {
-          page: pageNum - 1, // Backend pages are usually 0-indexed
+          page: pageNum - 1,
           size: pageSize,
+          text: text.trim() !== '' ? text : undefined,
         },
       })
       .then((response) => {
-        console.log(response.data.data.data)
         setMachines(response.data?.data?.data ?? []);
         setTotalPages(Math.ceil((response.data.data.total || 0) / pageSize));
         setLoading(false);
@@ -51,8 +57,20 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    fetchMachines(page);
-  }, [page]);
+    fetchMachines(page, searchText);
+  }, [page, searchText]);
+
+  // Debounced search
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      setPage(1); // Reset to first page on new search input
+      setSearchText(searchTextInput);
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(delayDebounce); // Cancel if user types again
+  }, [searchTextInput]);
+
+
 
   const onMachineClick = (machine) => {
     navigate(`/machines/${machine.id}`);
@@ -68,6 +86,31 @@ const Dashboard = () => {
 
   return (
     <div>
+      {/* Debounced Search Field */}
+      <Box 
+        display="flex" 
+        alignItems="center" 
+        mb={2} 
+        gap={2}
+        width="100%"
+        >
+        <TextField
+          label="Search machines"
+          variant="outlined"
+          value={searchTextInput}
+          onChange={(e) => setSearchTextInput(e.target.value)}
+          size="small"
+          sx={{ width: '100%' }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Box>
+
       <Typography variant="h4" gutterBottom>
         Machines
       </Typography>
@@ -83,7 +126,7 @@ const Dashboard = () => {
           <Typography variant="body1" color="error" sx={{ mb: 2 }}>
             {error}
           </Typography>
-          <Button onClick={() => fetchMachines(page)} variant="outlined">
+          <Button onClick={() => fetchMachines(page, searchText)} variant="outlined">
             Retry
           </Button>
         </>
@@ -146,7 +189,6 @@ const Dashboard = () => {
         ))}
       </List>
 
-      {/* Pagination controls */}
       <Box display="flex" justifyContent="center" mt={4}>
         <Pagination
           count={totalPages}

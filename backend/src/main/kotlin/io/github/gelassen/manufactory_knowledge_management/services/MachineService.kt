@@ -20,8 +20,16 @@ class MachineService(private val repository: MachinesRepository) {
 
     val logger = LoggerFactory.getLogger(MachineService::class.java)
 
-    fun getMachines(pageable: Pageable): Page<Machine> {
-        return repository.findAll(pageable)
+    fun getMachines(pageable: Pageable, text: String?, manufacturerText: String?): Page<Machine> {
+        return if (!text.isNullOrBlank()) {
+            repository.findByNameContainingIgnoreCaseOrManufacturerContainingIgnoreCase(
+                name = text,
+                manufacturer=manufacturerText,
+                pageable
+            )
+        } else {
+            repository.findAll(pageable)
+        }
     }
 
     fun getMachineByBarcode(barcode: String) : Machine? {

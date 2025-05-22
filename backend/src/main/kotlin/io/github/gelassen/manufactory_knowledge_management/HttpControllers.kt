@@ -26,10 +26,15 @@ class MachineController(
     @GetMapping("/all")
     fun getAllMachines(
         @RequestParam(defaultValue = "0") page: Int,
-        @RequestParam(defaultValue = "10") size: Int
+        @RequestParam(defaultValue = "10") size: Int,
+        @RequestParam(required = false) text: String?
     ): ResponseEntity<ApiResponse<Map<String, Any>>> {
         val pageable: Pageable = PageRequest.of(page, size)
-        val machinePage = machineService.getMachines(pageable)
+        val machinePage = machineService.getMachines(
+            pageable,
+            text,
+            manufacturerText = text
+        )
 
         val responseBody = mapOf(
             "data" to machinePage.content,
