@@ -70,8 +70,6 @@ const Dashboard = () => {
     return () => clearTimeout(delayDebounce); // Cancel if user types again
   }, [searchTextInput]);
 
-
-
   const onMachineClick = (machine) => {
     navigate(`/machines/${machine.id}`);
   };

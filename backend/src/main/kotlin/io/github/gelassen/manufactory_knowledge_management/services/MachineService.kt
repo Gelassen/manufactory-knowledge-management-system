@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 import kotlin.math.log
 
 @Transactional
@@ -56,6 +57,24 @@ class MachineService(private val repository: MachinesRepository) {
         logger.debug("MachineService::addBreakdown - machine after adding breakdown: {}", machine)
         return repository.save(machine)
     }
+
+    fun updateBreakdown(machineId: Long, breakdownId: Long, breakdownDto: BreakdownDTO): Machine {
+        val machine = repository.findById(machineId)
+            .orElseThrow { throw IllegalArgumentException("Machine not found: $machineId") }
+
+        val breakdown = machine.breakdowns.find { it.id == breakdownId }
+            ?: throw IllegalArgumentException("Breakdown not found: $breakdownId")
+
+        // Prefer mutating existing object instead of replacing it
+        breakdown.title = breakdownDto.title
+        breakdown.failure = breakdownDto.failure
+        breakdown.solution = breakdownDto.solution
+        breakdown.dateTime = Instant.now().epochSecond
+
+        logger.debug("MachineService::updateBreakdown - machine after editing breakdown: {}", machine)
+        return repository.save(machine)
+    }
+
 
     fun getBreakdownsByMachine(pageable: Pageable, machineId: Long): Page<Breakdown> {
         val machine = repository.findById(machineId)

@@ -104,8 +104,10 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/machines/new" element={<AddMachine />} />
-            <Route path="/machines/:id" element={<MachineDetails />} />
+            <Route path="/machines/:machineId/breakdowns/edit/:id" element={<AddBreakdown />} />
             <Route path="/machines/:machineId/breakdowns" element={<AddBreakdown />} />
+            <Route path="/machines/:id" element={<MachineDetails />} />
+
           </Routes>
         </Container>
       </Router>

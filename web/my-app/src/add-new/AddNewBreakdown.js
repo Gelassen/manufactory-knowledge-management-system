@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -10,19 +10,49 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import config from "../config"; 
+import config from "../config";
 
-const AddBreakdown = () => {
+const BreakdownForm = () => {
   const navigate = useNavigate();
-  const { machineId } = useParams(); // expects route like /breakdown/add/:machineId
+  const { machineId, id } = useParams(); // `id` is breakdown ID (optional)
+  const { state } = useLocation();
+
+  const isEditMode = Boolean(id);
 
   const [machine, setMachine] = useState(null);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const [title, setTitle] = useState("");
   const [failure, setFailure] = useState("");
   const [solution, setSolution] = useState("");
-  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (isEditMode) {
+      if (!state?.breakdown) {
+        throw new Error("Missing breakdown data in route state.");
+      }
+
+      const { title, failure, solution } = state.breakdown;
+      setTitle(title);
+      setFailure(failure);
+      setSolution(solution);
+    }
+  }, [isEditMode, state]);
+
+  useEffect(() => {
+    axios
+      .get(`${config.API_URL}/machine/${machineId}`)
+      .then((res) => {
+        setMachine(res.data.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to load machine:", err);
+        setError("Failed to load machine.");
+        setLoading(false);
+      });
+  }, [machineId]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,32 +62,22 @@ const AddBreakdown = () => {
       failure,
       solution,
       dateTime: Date.now(),
-      photofixations: []
+      photofixations: [],
     };
 
-    axios
-      .post(`${config.API_URL}/machine/${machineId}/breakdowns`, payload)
+    const request = isEditMode
+      ? axios.put(`${config.API_URL}/machine/${machineId}/breakdowns/${id}`, payload)
+      : axios.post(`${config.API_URL}/machine/${machineId}/breakdowns`, payload);
+
+    request
       .then(() => {
-        navigate("/"); // or navigate back to machine page
+        navigate(`/machine/${machineId}`);
       })
       .catch((err) => {
-        console.error(err);
+        console.error("Submission error:", err);
         setError("Failed to submit breakdown.");
       });
   };
-
-  useEffect(() => {
-    axios
-      .get(`${config.API_URL}/machine/${machineId}`)
-      .then((res) => {
-        setMachine(res.data.data); // adjust based on your API response
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to load machine:", err);
-        setLoading(false);
-      });
-  }, [machineId]);
 
   if (loading) return <div>Loading...</div>;
 
@@ -76,11 +96,7 @@ const AddBreakdown = () => {
     >
       <Card
         sx={{
-          width: {
-            xs: "100%",
-            sm: "100%",
-            md: 500,
-          },
+          width: { xs: "100%", sm: "100%", md: 500 },
           maxWidth: 500,
           boxShadow: 3,
         }}
@@ -88,7 +104,9 @@ const AddBreakdown = () => {
         <CardHeader
           title={
             <Typography variant="h5" fontWeight="bold" mb={2}>
-                Add Breakdown for {machine.name} (ID: {machine.id})
+              {isEditMode
+                ? `Edit Breakdown (ID: ${id}) for ${machine.name}`
+                : `Add Breakdown for ${machine.name} (ID: ${machine.id})`}
             </Typography>
           }
           sx={{ pb: 0 }}
@@ -97,39 +115,28 @@ const AddBreakdown = () => {
           <Box
             component="form"
             onSubmit={handleSubmit}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 3,
-              mt: 1,
-            }}
+            sx={{ display: "flex", flexDirection: "column", gap: 3, mt: 1 }}
           >
             <TextField
-              id="title"
               label="Title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              variant="outlined"
               required
               fullWidth
             />
             <TextField
-              id="failure"
               label="Failure"
               value={failure}
               onChange={(e) => setFailure(e.target.value)}
-              variant="outlined"
               required
               multiline
               rows={4}
               fullWidth
             />
             <TextField
-              id="solution"
               label="Solution"
               value={solution}
               onChange={(e) => setSolution(e.target.value)}
-              variant="outlined"
               required
               multiline
               rows={4}
@@ -143,7 +150,7 @@ const AddBreakdown = () => {
               fullWidth
               sx={{ textTransform: "none", fontWeight: "bold" }}
             >
-              Submit
+              {isEditMode ? "Update" : "Submit"}
             </Button>
             {error && (
               <Typography color="error" variant="body2">
@@ -157,4 +164,4 @@ const AddBreakdown = () => {
   );
 };
 
-export default AddBreakdown;
+export default BreakdownForm;

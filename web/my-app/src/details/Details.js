@@ -9,13 +9,18 @@ import {
   ListItemText,
   Pagination,
   Divider,
+  IconButton,
 } from '@mui/material';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import EditIcon from '@mui/icons-material/Edit';
 import { format } from 'date-fns';
 import config from '../config';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function MachineDetails() {
+  const navigate = useNavigate()
   const { id } = useParams();
 
   const [machine, setMachine] = useState(null);
@@ -55,6 +60,16 @@ function MachineDetails() {
     }
   };
 
+  const onAddNewClick = (machine) => {
+    navigate(`/machines/${machine.id}/breakdowns`);
+  };
+
+  const onEditClick = (machine, breakdown) => {
+    navigate(`/machines/${machine.id}/breakdowns/edit/${breakdown.id}`, {
+      state: { breakdown },
+    });
+  }
+
   useEffect(() => {
     fetchMachine();
     fetchBreakdowns(breakdownPage);
@@ -62,10 +77,27 @@ function MachineDetails() {
 
   return (
     <Box display="flex" justifyContent="center" p={2}>
-      <Paper sx={{ padding: 4, width: '100%', maxWidth: 700 }}>
+      <Paper sx={{ 
+        padding: 4, 
+        width: '100%', 
+        maxWidth: 700,
+        position: 'relative',  
+        }}>
+
         <Typography variant="h4" gutterBottom>
           Machine Details
         </Typography>
+
+        <IconButton
+          sx={{ position: 'absolute', top: 24, right: 32 }}
+          size="small"
+          onClick={(e) => {
+            e.stopPropagation();
+            onAddNewClick(machine);
+          }}
+        >
+          <AddCircleOutlineIcon />
+        </IconButton>
 
         {loading && !machine && (
           <Box display="flex" justifyContent="center" mb={2}>
@@ -96,6 +128,7 @@ function MachineDetails() {
             <Typography variant="h6" gutterBottom>
               Breakdowns
             </Typography>
+          
 
             {breakdowns.length > 0 ? (
               <>
@@ -112,11 +145,24 @@ function MachineDetails() {
                         boxShadow: 1,
                         flexDirection: 'column',
                         alignItems: 'flex-start',
+                        position: 'relative'
                       }}
                     >
                       <Typography variant="subtitle1" fontWeight="bold">
                         {breakdown.failure}
                       </Typography>
+
+                      <IconButton
+                        sx={{ position: 'absolute', top: 8, right: 8 }}
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEditClick(machine, breakdown);
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+
                       <Typography variant="body2" sx={{ mt: 1 }}>
                         <strong>Solution:</strong> {breakdown.solution}
                       </Typography>
