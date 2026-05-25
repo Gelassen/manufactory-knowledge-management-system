@@ -5,6 +5,8 @@ import io.github.gelassen.manufactory_knowledge_management.model.Machine
 import io.github.gelassen.manufactory_knowledge_management.model.request.BreakdownDTO
 import io.github.gelassen.manufactory_knowledge_management.model.request.MachineDTO
 import io.github.gelassen.manufactory_knowledge_management.services.MachineService
+import io.github.gelassen.manufactory_knowledge_management.services.QrService
+
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/machine")
 class MachineController(
     private val machineService: MachineService
+    private val qrService: QrService
 ) {
 
     @GetMapping("/all")
@@ -125,5 +128,21 @@ class MachineController(
         return ResponseEntity(ApiResponse(responseBody), HttpStatus.OK)
     }
 
+    @GetMapping("/{id}/qr")
+    fun getMachineQr(
+        @PathVariable id: Long
+    ): ResponseEntity<ApiResponse<Map<String, String>>> {
+
+        val qrValue = qrService.generateQrValue(id)
+
+        val responseBody = mapOf(
+            "qrValue" to qrValue
+        )
+
+        return ResponseEntity(
+            ApiResponse(responseBody),
+            HttpStatus.OK
+        )
+    }
 
 }

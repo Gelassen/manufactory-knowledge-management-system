@@ -10,9 +10,16 @@ import {
   Pagination,
   Divider,
   IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Button,
 } from '@mui/material';
+
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import EditIcon from '@mui/icons-material/Edit';
+import QrCodeIcon from '@mui/icons-material/QrCode';
+import { QRCodeCanvas } from 'qrcode.react';
 import { format } from 'date-fns';
 import config from '../config';
 import { useParams } from 'react-router-dom';
@@ -31,6 +38,10 @@ function MachineDetails() {
   const [breakdownPage, setBreakdownPage] = useState(1);
   const [totalBreakdownPages, setTotalBreakdownPages] = useState(1);
   const pageSize = 3;
+
+  const [qrOpen, setQrOpen] = useState(false);
+  const [qrValue, setQrValue] = useState(null);
+  const [qrLoading, setQrLoading] = useState(false);
 
   const fetchMachine = async () => {
     try {
@@ -64,6 +75,25 @@ function MachineDetails() {
     navigate(`/machines/${machine.id}/breakdowns`);
   };
 
+  const onShowQrCodeClick = async () => {
+    try {
+      setQrLoading(true);
+
+      const response = await axios.get(
+        `${config.API_URL}/machine/${id}/qr`
+      );
+
+      setQrValue(response.data.qrValue);
+      setQrOpen(true);
+
+    } catch (err) {
+      console.error(err);
+      setError('Failed to load QR code');
+    } finally {
+      setQrLoading(false);
+    }
+  };
+
   const onEditClick = (machine, breakdown) => {
     navigate(`/machines/${machine.id}/breakdowns/edit/${breakdown.id}`, {
       state: { breakdown },
@@ -87,6 +117,17 @@ function MachineDetails() {
         <Typography variant="h4" gutterBottom>
           Machine Details
         </Typography>
+
+        <IconButton
+          sx={{ position: 'absolute', top: 24, right: 70 }}
+          size="small"
+          onClick={(e) => {
+            e.stopPropagation();
+            onShowQrCodeClick();
+          }}
+        >
+          <QrCodeIcon />
+        </IconButton>
 
         <IconButton
           sx={{ position: 'absolute', top: 24, right: 32 }}
@@ -187,6 +228,33 @@ function MachineDetails() {
             )}
           </>
         )}
+
+        <Dialog open={qrOpen} onClose={() => setQrOpen(false)}>
+          <DialogTitle>Machine QR Code</DialogTitle>
+
+          <DialogContent
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minWidth: 300,
+              minHeight: 300,
+            }}
+          >
+            {qrLoading && !qrValue ? (
+              <CircularProgress />
+            ) : (
+              qrValue && (
+                <QRCodeCanvas
+                  value={qrValue}
+                  size={220}
+                  level="M"
+                />
+              )
+            )}
+          </DialogContent>
+        </Dialog>
+
       </Paper>
     </Box>
   );
