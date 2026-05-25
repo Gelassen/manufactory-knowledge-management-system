@@ -3,20 +3,21 @@ This system is made to solve business issue for one manufactory. It is also has 
 
 # Deployment
 ```
-$ docker-compose up --build
+$ docker compose up --build
 ```
 
-Generate OpenAPI skeleton for APIs
-```
-$ docker-compose run --rm openapi-generator-backend
-$ docker-compose run --rm openapi-generator-web 
-
-```
+Check web server by address http://172.18.254.1:8080/ 
 
 Start web client:
 ```
+$ cd web && cd my-app
+$ npm install
 $ npm start
 ```
+
+## Known issues
+
+Under VPN docker dependencies and npm packages works unstable 
 
 # Development
 
@@ -44,6 +45,13 @@ Manual operations with database:
 $ docker exec -it postgres-db /bin/sh
 $ psql -U myuser -d mydb
 $ \d
+```
+
+## Generate OpenAPI skeleton for APIs
+```
+$ docker-compose run --rm openapi-generator-backend
+$ docker-compose run --rm openapi-generator-web 
+
 ```
 
 ## Cleanup
