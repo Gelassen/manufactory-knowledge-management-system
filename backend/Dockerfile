@@ -2,7 +2,8 @@
 FROM alpine:3.19.1
 
 # Install OpenJDK 17, curl, and bash
-RUN apk add --no-cache openjdk17 curl bash
+# RUN apk add --no-cache openjdk17 curl bash
+RUN apk add --no-cache openjdk17-jdk curl bash
 
 # Download wait-for-it.sh script and make it executable
 RUN curl -o /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
