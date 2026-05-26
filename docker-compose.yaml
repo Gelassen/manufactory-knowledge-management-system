@@ -1,5 +1,4 @@
 services:
-
   database:
     image: postgres:15
     container_name: postgres-db
@@ -13,7 +12,6 @@ services:
     volumes:
       - ./database/postgres-data:/var/lib/postgresql/data
       - ./database/scripts:/docker-entrypoint-initdb.d
-
     networks:
       priv-knowledge-system-net:
         ipv4_address: 172.18.254.2
@@ -28,45 +26,47 @@ services:
     networks:
       priv-knowledge-system-net:
         ipv4_address: 172.18.254.3
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: '0.5'
-    #       memory: 512M
-    depends_on: 
+    depends_on:
       - database
+    restart: unless-stopped
 
-  # openapi-generator-backend:
-  #   image: openapitools/openapi-generator-cli:v7.1.0
-  #   container_name: openapi-generator-backend
-  #   volumes:
-  #     - ./common/openapi/openapi.yaml:/local/openapi/openapi.yaml
-  #     - ./backend/generated:/local/generated
-  #   networks:
-  #     - priv-knowledge-system-net
-  #   command: > 
-  #     generate 
-  #     -i /local/openapi/openapi.yaml 
-  #     -g kotlin-spring 
-  #     -o /local/generated/backend
-  #     -p gradleBuildFile=true,basePackageName=io.github.gelassen.manufactory_knowledge_management.generated
+  # ==================== WEB DEVELOPMENT ====================
+  web:
+    container_name: knowledge-management-web-dev
+    build:
+      context: ./web/my-app
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./web/my-app:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_API_URL=http://172.18.254.3:8080
+      - CHOKIDAR_USEPOLLING=true   # важно для hot-reload в Docker
+    networks:
+      priv-knowledge-system-net:
+        ipv4_address: 172.18.254.4
+    depends_on:
+      - server
+    profiles: ["dev"]
+    restart: unless-stopped
 
-  # openapi-generator-web:
-  #   image: openapitools/openapi-generator-cli:v7.1.0
-  #   container_name: openapi-generator-web
-  #   volumes:
-  #     - ./common/openapi/openapi.yaml:/local/openapi/openapi.yaml
-  #     - ./web/generated:/local/generated
-  #   networks:
-  #     - priv-knowledge-system-net
-  #   command: >
-  #     generate
-  #     -i /local/openapi/openapi.yaml
-  #     -g typescript-axios
-  #     -o /local/generated
-  #     --additional-properties=useSingleRequestParameter=true,supportsES6=true,withSeparateModelsAndApi=true,modelPackage=models,apiPackage=api,typescriptThreePlus=true 
-  #     -o /local/generated
-  #     -p basePackage=io.github.gelassen.manufactory_knowledge_management.generated
+  # ==================== WEB PRODUCTION ====================
+  web-prod:
+    container_name: knowledge-management-web
+    build:
+      context: ./web/my-app
+      dockerfile: Dockerfile
+    ports:
+      - "3001:80"                   # используем другой порт, чтобы не конфликтовать
+    networks:
+      priv-knowledge-system-net:
+        ipv4_address: 172.18.254.5
+    depends_on:
+      - server
+    profiles: ["prod"]
+    restart: unless-stopped
 
 networks:
   priv-knowledge-system-net:

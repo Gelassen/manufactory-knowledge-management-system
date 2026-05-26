@@ -2,18 +2,19 @@
 This system is made to solve business issue for one manufactory. It is also has intent behind it to scale up to a product to fulfill needs of organisation which shares the same issue. 
 
 # Deployment
+
+Production only
 ```
-$ docker compose up --build
+$ docker compose --profile prod up --build web-prod server database
 ```
 
-Check web server by address http://172.18.254.1:8080/ 
+Production and dev environment:
+```
+$ docker compose --profile dev --profile prod up -d
+```
 
-Start web client:
-```
-$ cd web && cd my-app
-$ npm install
-$ npm start
-```
+Web server API: localhost:8080
+Web client: localhost: 3000
 
 ## Known issues
 
