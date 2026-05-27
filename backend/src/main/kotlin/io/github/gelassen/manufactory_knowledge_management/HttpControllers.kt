@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/machine")
 class MachineController(
-    private val machineService: MachineService
+    private val machineService: MachineService,
     private val qrService: QrService
 ) {
 

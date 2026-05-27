@@ -1,3 +1,7 @@
+package io.github.gelassen.manufactory_knowledge_management.services
+
+import org.springframework.stereotype.Service
+
 @Service
 class QrService {
 
