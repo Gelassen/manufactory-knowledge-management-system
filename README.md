@@ -60,4 +60,8 @@ $ docker-compose run --rm openapi-generator-web
 $ sudo rm -R /backend/postgres-data
 $ docker system prune -a --volumes -f
 $ docker-compose down -v # stops containers AND remove volumes
+
+$ docker compose --profile dev --profile prod down -v --remove-orphans
+$ docker network prune -f
+$ docker compose --profile dev --profile prod up -d --build
 ```

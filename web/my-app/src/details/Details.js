@@ -75,24 +75,40 @@ function MachineDetails() {
     navigate(`/machines/${machine.id}/breakdowns`);
   };
 
-  const onShowQrCodeClick = async () => {
-    try {
-      setQrLoading(true);
+const onShowQrCodeClick = async () => {
+  try {
+    setQrLoading(true);
 
-      const response = await axios.get(
-        `${config.API_URL}/machine/${id}/qr`
-      );
+    setQrValue(null);
+    setError(null);
 
-      setQrValue(response.data.qrValue);
-      setQrOpen(true);
+    const response = await axios.get(
+      `${config.API_URL}/machine/${id}/qr`
+    );
 
-    } catch (err) {
-      console.error(err);
-      setError('Failed to load QR code');
-    } finally {
-      setQrLoading(false);
+    if (response.status !== 200) {
+      throw new Error(`Unexpected status code: ${response.status}`);
     }
-  };
+
+    const qrValue = response?.data?.data?.qrValue;
+
+    if (!qrValue) {
+      throw new Error('QR value is missing');
+    }
+
+    setQrValue(qrValue);
+    setQrOpen(true);
+
+  } catch (err) {
+    console.error(err);
+
+    setError('Server error. QR code is not available.');
+    setQrOpen(true);
+
+  } finally {
+    setQrLoading(false);
+  }
+};
 
   const onEditClick = (machine, breakdown) => {
     navigate(`/machines/${machine.id}/breakdowns/edit/${breakdown.id}`, {
@@ -239,18 +255,30 @@ function MachineDetails() {
               alignItems: 'center',
               minWidth: 300,
               minHeight: 300,
+              flexDirection: 'column',
+              gap: 2,
             }}
           >
-            {qrLoading && !qrValue ? (
+            {qrLoading ? (
               <CircularProgress />
+            ) : error ? (
+              <Typography
+                variant="body1"
+                color="error"
+                textAlign="center"
+              >
+                Server error. QR code is not available.
+              </Typography>
+            ) : qrValue ? (
+              <QRCodeCanvas
+                value={qrValue}
+                size={220}
+                level="M"
+              />
             ) : (
-              qrValue && (
-                <QRCodeCanvas
-                  value={qrValue}
-                  size={220}
-                  level="M"
-                />
-              )
+              <Typography variant="body2">
+                QR code is not available.
+              </Typography>
             )}
           </DialogContent>
         </Dialog>
