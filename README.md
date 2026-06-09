@@ -13,7 +13,7 @@ Production and dev environment:
 $ docker compose --profile dev --profile prod up -d
 ```
 
-Web server API: localhost:8080
+Web server API: http://localhost:8080/swagger-ui/index.html
 Web client: localhost: 3000
 
 ## Known issues

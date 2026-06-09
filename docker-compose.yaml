@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   database:
     image: postgres:15
@@ -43,7 +45,7 @@ services:
       - /app/node_modules
     environment:
       - REACT_APP_API_URL=http://172.18.254.3:8080
-      - CHOKIDAR_USEPOLLING=true   # важно для hot-reload в Docker
+      - CHOKIDAR_USEPOLLING=true
     networks:
       priv-knowledge-system-net:
         ipv4_address: 172.18.254.4
@@ -59,7 +61,7 @@ services:
       context: ./web/my-app
       dockerfile: Dockerfile
     ports:
-      - "3001:80"                   # используем другой порт, чтобы не конфликтовать
+      - "3001:80"
     networks:
       priv-knowledge-system-net:
         ipv4_address: 172.18.254.5
