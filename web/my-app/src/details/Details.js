@@ -21,10 +21,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import { QRCodeCanvas } from 'qrcode.react';
 import { format } from 'date-fns';
-import config from '../config';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import client from '../client';
 
 function MachineDetails() {
   const navigate = useNavigate()
@@ -46,7 +46,7 @@ function MachineDetails() {
   const fetchMachine = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${config.API_URL}/machine/${id}`);
+      const response = await client.get(`/machine/${id}`);
       setMachine(response.data.data);
       setLoading(false);
     } catch (err) {
@@ -57,7 +57,7 @@ function MachineDetails() {
 
   const fetchBreakdowns = async (page = 1) => {
     try {
-      const response = await axios.get(`${config.API_URL}/machine/${id}/breakdowns`, {
+      const response = await client.get(`/machine/${id}/breakdowns`, {
         params: { page: page - 1, size: pageSize },
       });
 
@@ -82,8 +82,8 @@ const onShowQrCodeClick = async () => {
     setQrValue(null);
     setError(null);
 
-    const response = await axios.get(
-      `${config.API_URL}/machine/${id}/qr`
+    const response = await client.get(
+      `/machine/${id}/qr`
     );
 
     if (response.status !== 200) {

@@ -16,7 +16,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import config from '../config';
+import client from '../client';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -36,8 +36,8 @@ const Dashboard = () => {
     setLoading(true);
     setError(null);
 
-    axios
-      .get(`${config.API_URL}/machine/all`, {
+    client
+      .get(`/machine/all`, {
         params: {
           page: pageNum - 1,
           size: pageSize,

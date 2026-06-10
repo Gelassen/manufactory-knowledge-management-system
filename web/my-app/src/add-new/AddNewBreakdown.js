@@ -10,7 +10,7 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import config from "../config";
+import client from '../client';
 
 const BreakdownForm = () => {
   const navigate = useNavigate();
@@ -41,8 +41,8 @@ const BreakdownForm = () => {
   }, [isEditMode, state]);
 
   useEffect(() => {
-    axios
-      .get(`${config.API_URL}/machine/${machineId}`)
+    client
+      .get(`/machine/${machineId}`)
       .then((res) => {
         setMachine(res.data.data);
         setLoading(false);
@@ -66,8 +66,8 @@ const BreakdownForm = () => {
     };
 
     const request = isEditMode
-      ? axios.put(`${config.API_URL}/machine/${machineId}/breakdowns/${id}`, payload)
-      : axios.post(`${config.API_URL}/machine/${machineId}/breakdowns`, payload);
+      ? client.put(`/machine/${machineId}/breakdowns/${id}`, payload)
+      : client.post(`/machine/${machineId}/breakdowns`, payload);
 
     request
       .then(() => {

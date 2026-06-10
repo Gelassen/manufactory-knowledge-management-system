@@ -10,15 +10,15 @@ import {
   Box,
 } from "@mui/material";
 import axios from "axios";
-import config from '../config';
+import client from '../client';
 
 // Reusable submit function
 const submitMachine = async (formData: any) => {
   const cancelToken = axios.CancelToken.source();
 
   try {
-    const response = await axios.post(
-      `${config.API_URL}/machine`,
+    const response = await client.post(
+      `/machine`,
       formData,
       {
         cancelToken: cancelToken.token,

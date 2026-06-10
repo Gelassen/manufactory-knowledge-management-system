@@ -12,11 +12,11 @@ import AddBreakdown from '../add-new/AddNewBreakdown';
 const theme = createTheme(); 
 
 const Container = styled("div")(({ theme }) => ({
-  maxWidth: "40%",               // You can tweak this for responsiveness
-  marginLeft: "30%",             // 30% from the left
-  marginRight: "30%",            // 30% from the right
+  width: "100%",
+  maxWidth: "1200px",
+  margin: "0 auto",
   padding: theme.spacing(2),
-  boxSizing: "border-box",       // ensures padding doesn’t overflow
+  boxSizing: "border-box",
 }));
 
 const Header = styled("header")(({ theme }) => ({
