@@ -6,34 +6,29 @@ import {
   CircularProgress,
   List,
   ListItem,
-  ListItemText,
   Pagination,
   Divider,
   IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
-  Button,
 } from '@mui/material';
-
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import { QRCodeCanvas } from 'qrcode.react';
 import { format } from 'date-fns';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import client from '../client';
 
 function MachineDetails() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const [machine, setMachine] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const [breakdowns, setBreakdowns] = useState([]);
   const [breakdownPage, setBreakdownPage] = useState(1);
   const [totalBreakdownPages, setTotalBreakdownPages] = useState(1);
@@ -48,9 +43,9 @@ function MachineDetails() {
       setLoading(true);
       const response = await client.get(`/machine/${id}`);
       setMachine(response.data.data);
-      setLoading(false);
     } catch (err) {
       setError('Failed to fetch machine data');
+    } finally {
       setLoading(false);
     }
   };
@@ -60,9 +55,7 @@ function MachineDetails() {
       const response = await client.get(`/machine/${id}/breakdowns`, {
         params: { page: page - 1, size: pageSize },
       });
-
       const { data, total } = response.data.data;
-
       setBreakdowns(data);
       setTotalBreakdownPages(Math.ceil(total / pageSize));
     } catch (err) {
@@ -71,50 +64,41 @@ function MachineDetails() {
     }
   };
 
-  const onAddNewClick = (machine) => {
-    navigate(`/machines/${machine.id}/breakdowns`);
+  const onAddNewClick = () => {
+    if (machine) {
+      navigate(`/machines/${machine.id}/breakdowns`);
+    }
   };
 
-const onShowQrCodeClick = async () => {
-  try {
-    setQrLoading(true);
+  const onShowQrCodeClick = async () => {
+    try {
+      setQrLoading(true);
+      setQrValue(null);
+      setError(null);
 
-    setQrValue(null);
-    setError(null);
+      const response = await client.get(`/machine/${id}/qr`);
+      const qrValue = response?.data?.data?.qrValue;
 
-    const response = await client.get(
-      `/machine/${id}/qr`
-    );
+      if (!qrValue) throw new Error('QR value is missing');
 
-    if (response.status !== 200) {
-      throw new Error(`Unexpected status code: ${response.status}`);
+      setQrValue(qrValue);
+      setQrOpen(true);
+    } catch (err) {
+      console.error(err);
+      setError('Server error. QR code is not available.');
+      setQrOpen(true);
+    } finally {
+      setQrLoading(false);
     }
+  };
 
-    const qrValue = response?.data?.data?.qrValue;
-
-    if (!qrValue) {
-      throw new Error('QR value is missing');
+  const onEditClick = (breakdown) => {
+    if (machine) {
+      navigate(`/machines/${machine.id}/breakdowns/edit/${breakdown.id}`, {
+        state: { breakdown },
+      });
     }
-
-    setQrValue(qrValue);
-    setQrOpen(true);
-
-  } catch (err) {
-    console.error(err);
-
-    setError('Server error. QR code is not available.');
-    setQrOpen(true);
-
-  } finally {
-    setQrLoading(false);
-  }
-};
-
-  const onEditClick = (machine, breakdown) => {
-    navigate(`/machines/${machine.id}/breakdowns/edit/${breakdown.id}`, {
-      state: { breakdown },
-    });
-  }
+  };
 
   useEffect(() => {
     fetchMachine();
@@ -122,49 +106,10 @@ const onShowQrCodeClick = async () => {
   }, [id, breakdownPage]);
 
   return (
-    <Box display="flex" justifyContent="center" p={2}>
-      <Paper sx={{ 
-        padding: 4, 
-        width: '100%', 
-        maxWidth: 700,
-        position: 'relative',  
-        }}>
-
-        <Typography variant="h4" gutterBottom>
-          Machine Details
-        </Typography>
-
-        <Box
-          display="flex"
-          justifyContent="flex-end"
-          gap={1}
-          mb={2}
-        >
-          <IconButton
-            size="small"
-            onClick={(e) => {
-              e.stopPropagation();
-              onShowQrCodeClick();
-            }}
-          >
-            <QrCodeIcon />
-          </IconButton>
-
-          <IconButton
-            size="small"
-            onClick={(e) => {
-              e.stopPropagation();
-              onAddNewClick(machine);
-            }}
-          >
-            <AddCircleOutlineIcon />
-          </IconButton>
-        </Box>
-
-
-
+    <Box sx={{ maxWidth: 700, mx: 'auto' }}>
+      <Paper sx={{ padding: { xs: 2, sm: 3, md: 4 } }}>
         {loading && !machine && (
-          <Box display="flex" justifyContent="center" mb={2}>
+          <Box display="flex" justifyContent="center" my={4}>
             <CircularProgress />
           </Box>
         )}
@@ -177,22 +122,27 @@ const onShowQrCodeClick = async () => {
 
         {machine && (
           <>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h5" gutterBottom>
               {machine.name}
             </Typography>
+
             <Typography variant="body1">
               <strong>Manufacturer:</strong> {machine.manufacturer}
             </Typography>
-            <Typography variant="body1" mb={2}>
+            <Typography variant="body1" mb={3}>
               <strong>Barcode:</strong> {machine.barcode}
             </Typography>
 
-            <Divider sx={{ my: 2 }} />
+            <Divider sx={{ my: 3 }} />
 
-            <Typography variant="h6" gutterBottom>
-              Breakdowns
-            </Typography>
-          
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+              <Typography variant="h6">
+                Breakdowns
+              </Typography>
+              <IconButton color="primary" onClick={onAddNewClick}>
+                <AddCircleOutlineIcon />
+              </IconButton>
+            </Box>
 
             {breakdowns.length > 0 ? (
               <>
@@ -202,27 +152,31 @@ const onShowQrCodeClick = async () => {
                       key={breakdown.id}
                       sx={{
                         mb: 2,
-                        p: 2,
+                        p: 2.5,
                         border: '1px solid #e0e0e0',
                         borderRadius: 2,
                         bgcolor: 'background.paper',
                         boxShadow: 1,
                         flexDirection: 'column',
                         alignItems: 'flex-start',
-                        position: 'relative'
+                        position: 'relative',
+                        minHeight: 110,
                       }}
                     >
-                      <Typography variant="subtitle1" fontWeight="bold">
+                      <Typography variant="subtitle1" fontWeight="bold" pr={5}>
                         {breakdown.failure}
                       </Typography>
 
                       <IconButton
-                        sx={{ position: 'absolute', top: 8, right: 8 }}
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onEditClick(machine, breakdown);
+                        sx={{
+                          position: 'absolute',
+                          top: 16,
+                          right: 16,
+                          backgroundColor: 'background.paper',
+                          boxShadow: 1,
                         }}
+                        size="small"
+                        onClick={() => onEditClick(breakdown)}
                       >
                         <EditIcon />
                       </IconButton>
@@ -237,7 +191,7 @@ const onShowQrCodeClick = async () => {
                   ))}
                 </List>
 
-                <Box display="flex" justifyContent="center" mt={2}>
+                <Box display="flex" justifyContent="center" mt={3}>
                   <Pagination
                     count={totalBreakdownPages}
                     page={breakdownPage}
@@ -251,54 +205,38 @@ const onShowQrCodeClick = async () => {
             )}
           </>
         )}
-
-        <Dialog open={qrOpen} onClose={() => setQrOpen(false)}>
-          <DialogTitle>Machine QR Code</DialogTitle>
-
-          <DialogContent
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              minWidth: 300,
-              minHeight: 300,
-              flexDirection: 'column',
-              gap: 2,
-            }}
-          >
-            {qrLoading ? (
-              <CircularProgress />
-            ) : error ? (
-              <Typography
-                variant="body1"
-                color="error"
-                textAlign="center"
-              >
-                Server error. QR code is not available.
-              </Typography>
-            ) : qrValue ? (
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <QRCodeCanvas
-                  value={qrValue}
-                  size={Math.min(window.innerWidth * 0.6, 220)}
-                  level="M"
-                />
-              </Box>
-            ) : (
-              <Typography variant="body2">
-                QR code is not available.
-              </Typography>
-            )}
-          </DialogContent>
-        </Dialog>
-
       </Paper>
+
+      {/* QR Code Dialog */}
+      <Dialog open={qrOpen} onClose={() => setQrOpen(false)} maxWidth="xs" fullWidth>
+        <DialogTitle>Machine QR Code</DialogTitle>
+        <DialogContent
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: 320,
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
+          {qrLoading ? (
+            <CircularProgress />
+          ) : error ? (
+            <Typography variant="body1" color="error" textAlign="center">
+              Server error. QR code is not available.
+            </Typography>
+          ) : qrValue ? (
+            <QRCodeCanvas
+              value={qrValue}
+              size={Math.min(window.innerWidth * 0.7, 260)}
+              level="M"
+            />
+          ) : (
+            <Typography variant="body2">QR code is not available.</Typography>
+          )}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

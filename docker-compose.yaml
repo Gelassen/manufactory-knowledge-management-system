@@ -44,7 +44,6 @@ services:
       - ./web/my-app:/app
       - /app/node_modules
     environment:
-      - REACT_APP_API_URL=http://172.18.254.3:8080
       - CHOKIDAR_USEPOLLING=true
     networks:
       priv-knowledge-system-net:

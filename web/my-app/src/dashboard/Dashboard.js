@@ -86,119 +86,130 @@ const Dashboard = () => {
     <div>
       {/* Debounced Search Field */}
       <Box 
-        display="flex" 
-        alignItems="center" 
-        mb={2} 
-        gap={2}
-        width="100%"
-        >
-        <TextField
-          label="Search machines"
-          variant="outlined"
-          value={searchTextInput}
-          onChange={(e) => setSearchTextInput(e.target.value)}
-          size="small"
-          sx={{ width: '100%' }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Box>
+        sx={{ 
+          maxWidth: { xs: '100%', md: 900 },   // или 800
+          mx: 'auto',
+          width: '100%'
+        }}
+      >
 
-      <Typography variant="h4" gutterBottom>
-        Machines
-      </Typography>
-
-      {loading && (
-        <Box display="flex" justifyContent="center" sx={{ mb: 2 }}>
-          <CircularProgress />
-        </Box>
-      )}
-
-      {error && (
-        <>
-          <Typography variant="body1" color="error" sx={{ mb: 2 }}>
-            {error}
-          </Typography>
-          <Button onClick={() => fetchMachines(page, searchText)} variant="outlined">
-            Retry
-          </Button>
-        </>
-      )}
-
-      <List>
-        {machines.map((machine) => (
-          <ListItem
-            key={machine.id}
-            sx={{
-              mb: 2,
-              p: 2,
-              border: '1px solid #ccc',
-              borderRadius: 2,
-              position: 'relative',
-              cursor: 'pointer',
-              '&:hover': {
-                backgroundColor: 'action.hover',
-              },
-            }}
-            onClick={() => onMachineClick(machine)}
+        <Box 
+          display="flex" 
+          alignItems="center" 
+          mb={2} 
+          gap={2}
+          width="100%"
           >
-            <IconButton
-              sx={{ position: 'absolute', top: 8, right: 8 }}
-              size="large"
-              onClick={(e) => {
-                e.stopPropagation();
-                onAddNewClick(machine);
-              }}
-            >
-              <AddCircleOutlineIcon />
-            </IconButton>
+          <TextField
+            label="Search machines"
+            variant="outlined"
+            value={searchTextInput}
+            onChange={(e) => setSearchTextInput(e.target.value)}
+            size="small"
+            sx={{ width: '100%' }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
 
-            <ListItemText
-              primary={machine.name}
-              secondary={
-                <>
-                  <div><strong>Manufacturer:</strong> {machine.manufacturer}</div>
-                  <div><strong>Barcode:</strong> {machine.barcode}</div>
-                </>
-              }
-              slotProps={{
-                primary: { component: 'div', variant: 'h6' },
-                secondary: { component: 'div' },
-              }}
-              sx={{
-                flexDirection: "column",
-                alignItems: "flex-start",
-              }}
-            />
+        <Typography variant="h4" gutterBottom>
+          Machines
+        </Typography>
 
-            <Typography
-              variant="caption"
-              sx={{
-                position: 'absolute',
-                bottom: 8,
-                right: 12,
-                fontWeight: 'bold',
-              }}
-            >
-              {machine.breakdowns?.length || 0} breakdowns
+        {loading && (
+          <Box display="flex" justifyContent="center" sx={{ mb: 2 }}>
+            <CircularProgress />
+          </Box>
+        )}
+
+        {error && (
+          <>
+            <Typography variant="body1" color="error" sx={{ mb: 2 }}>
+              {error}
             </Typography>
-          </ListItem>
-        ))}
-      </List>
+            <Button onClick={() => fetchMachines(page, searchText)} variant="outlined">
+              Retry
+            </Button>
+          </>
+        )}
 
-      <Box display="flex" justifyContent="center" mt={4}>
-        <Pagination
-          count={totalPages}
-          page={page}
-          onChange={handlePageChange}
-          color="primary"
-        />
+        <List>
+          {machines.map((machine) => (
+            <ListItem
+              key={machine.id}
+              sx={{
+                mb: 2,
+                p: 2,
+                border: '1px solid #ccc',
+                borderRadius: 2,
+                position: 'relative',
+                cursor: 'pointer',
+                '&:hover': {
+                  backgroundColor: 'action.hover',
+                },
+              }}
+              onClick={() => onMachineClick(machine)}
+            >
+              <IconButton
+                sx={{ position: 'absolute', top: 8, right: 8 }}
+                size="large"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAddNewClick(machine);
+                }}
+              >
+                <AddCircleOutlineIcon />
+              </IconButton>
+
+              <ListItemText
+                primary={machine.name}
+                secondary={
+                  <>
+                    <div><strong>Manufacturer:</strong> {machine.manufacturer}</div>
+                    <div><strong>Barcode:</strong> {machine.barcode}</div>
+                  </>
+                }
+                slotProps={{
+                  primary: { component: 'div', variant: 'h6' },
+                  secondary: { component: 'div' },
+                }}
+                sx={{
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                }}
+              />
+
+              <Typography
+                variant="caption"
+                sx={{
+                  position: 'absolute',
+                  bottom: 8,
+                  right: 12,
+                  fontWeight: 'bold',
+                }}
+              >
+                {machine.breakdowns?.length || 0} breakdowns
+              </Typography>
+            </ListItem>
+          ))}
+        </List>
+
+        <Box display="flex" justifyContent="center" mt={4}>
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </Box>
+
       </Box>
+
     </div>
   );
 };
