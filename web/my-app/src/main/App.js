@@ -9,9 +9,12 @@ import {
   Menu,
   MenuItem,
   Container,
+  Box,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import QrCodeIcon from '@mui/icons-material/QrCode';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 import Dashboard from "../dashboard/Dashboard";
 import AddMachine from "../add-new/AddNew";
@@ -20,7 +23,7 @@ import AddBreakdown from '../add-new/AddNewBreakdown';
 
 const theme = createTheme();
 
-// Вынесли Header в отдельный компонент, чтобы использовать useLocation внутри Router
+// Отдельный компонент для AppBar
 const AppHeader = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -40,7 +43,7 @@ const AppHeader = () => {
   return (
     <AppBar position="static" color="default" elevation={1}>
       <Toolbar sx={{ minHeight: { xs: 56, sm: 64 } }}>
-        {/* Кнопка Назад только на странице деталей */}
+        {/* Кнопка Назад на странице деталей */}
         {isDetailsPage && (
           <IconButton
             edge="start"
@@ -69,6 +72,25 @@ const AppHeader = () => {
             : "Manufacture Knowledge System"}
         </Typography>
 
+        {/* Кнопки QR и + только на странице деталей */}
+        {isDetailsPage && (
+          <Box sx={{ display: 'flex', gap: 0.5, mr: 1 }}>
+            <IconButton 
+              color="inherit" 
+              onClick={() => window.showQrCode && window.showQrCode()}
+            >
+              <QrCodeIcon />
+            </IconButton>
+            <IconButton 
+              color="inherit" 
+              onClick={() => window.addNewBreakdown && window.addNewBreakdown()}
+            >
+              <AddCircleOutlineIcon />
+            </IconButton>
+          </Box>
+        )}
+
+        {/* Меню */}
         <IconButton
           edge="end"
           color="inherit"

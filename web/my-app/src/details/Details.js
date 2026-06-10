@@ -100,6 +100,17 @@ function MachineDetails() {
     }
   };
 
+  // Экспонируем функции для AppBar
+  useEffect(() => {
+    window.showQrCode = onShowQrCodeClick;
+    window.addNewBreakdown = onAddNewClick;
+
+    return () => {
+      delete window.showQrCode;
+      delete window.addNewBreakdown;
+    };
+  }, [machine]);
+
   useEffect(() => {
     fetchMachine();
     fetchBreakdowns(breakdownPage);
@@ -136,9 +147,7 @@ function MachineDetails() {
             <Divider sx={{ my: 3 }} />
 
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-              <Typography variant="h6">
-                Breakdowns
-              </Typography>
+              <Typography variant="h6">Breakdowns</Typography>
               <IconButton color="primary" onClick={onAddNewClick}>
                 <AddCircleOutlineIcon />
               </IconButton>
@@ -170,8 +179,8 @@ function MachineDetails() {
                       <IconButton
                         sx={{
                           position: 'absolute',
-                          top: 16,
-                          right: 16,
+                          top: 12,
+                          right: 12,
                           backgroundColor: 'background.paper',
                           boxShadow: 1,
                         }}
