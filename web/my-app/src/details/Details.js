@@ -134,27 +134,34 @@ const onShowQrCodeClick = async () => {
           Machine Details
         </Typography>
 
-        <IconButton
-          sx={{ position: 'absolute', top: 24, right: 70 }}
-          size="small"
-          onClick={(e) => {
-            e.stopPropagation();
-            onShowQrCodeClick();
-          }}
+        <Box
+          display="flex"
+          justifyContent="flex-end"
+          gap={1}
+          mb={2}
         >
-          <QrCodeIcon />
-        </IconButton>
+          <IconButton
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation();
+              onShowQrCodeClick();
+            }}
+          >
+            <QrCodeIcon />
+          </IconButton>
 
-        <IconButton
-          sx={{ position: 'absolute', top: 24, right: 32 }}
-          size="small"
-          onClick={(e) => {
-            e.stopPropagation();
-            onAddNewClick(machine);
-          }}
-        >
-          <AddCircleOutlineIcon />
-        </IconButton>
+          <IconButton
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddNewClick(machine);
+            }}
+          >
+            <AddCircleOutlineIcon />
+          </IconButton>
+        </Box>
+
+
 
         {loading && !machine && (
           <Box display="flex" justifyContent="center" mb={2}>
@@ -270,11 +277,19 @@ const onShowQrCodeClick = async () => {
                 Server error. QR code is not available.
               </Typography>
             ) : qrValue ? (
-              <QRCodeCanvas
-                value={qrValue}
-                size={220}
-                level="M"
-              />
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <QRCodeCanvas
+                  value={qrValue}
+                  size={Math.min(window.innerWidth * 0.6, 220)}
+                  level="M"
+                />
+              </Box>
             ) : (
               <Typography variant="body2">
                 QR code is not available.

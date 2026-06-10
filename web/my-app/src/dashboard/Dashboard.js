@@ -149,7 +149,7 @@ const Dashboard = () => {
           >
             <IconButton
               sx={{ position: 'absolute', top: 8, right: 8 }}
-              size="small"
+              size="large"
               onClick={(e) => {
                 e.stopPropagation();
                 onAddNewClick(machine);
@@ -169,6 +169,10 @@ const Dashboard = () => {
               slotProps={{
                 primary: { component: 'div', variant: 'h6' },
                 secondary: { component: 'div' },
+              }}
+              sx={{
+                flexDirection: "column",
+                alignItems: "flex-start",
               }}
             />
 
