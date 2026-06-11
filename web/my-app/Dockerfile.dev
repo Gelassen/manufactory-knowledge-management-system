@@ -12,4 +12,6 @@ EXPOSE 3000
 ENV CHOKIDAR_USEPOLLING=true
 ENV WATCHPACK_POLLING=true
 
+RUN ls node_modules/html5-qrcode
+
 CMD ["npm", "start"]

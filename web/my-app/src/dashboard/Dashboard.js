@@ -15,8 +15,8 @@ import {
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import client from '../client';
+import BarcodeScanner from "../qr-code/scanner";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -31,6 +31,8 @@ const Dashboard = () => {
 
   const [searchText, setSearchText] = useState('');
   const [searchTextInput, setSearchTextInput] = useState('');
+
+  const [scannerOpen, setScannerOpen] = useState(false);
 
   const fetchMachines = (pageNum = 1, text = '') => {
     setLoading(true);
@@ -115,6 +117,10 @@ const Dashboard = () => {
               ),
             }}
           />
+
+          <IconButton onClick={() => setScannerOpen(true)}>
+            📷
+          </IconButton>
         </Box>
 
         <Typography variant="h4" gutterBottom>
@@ -136,6 +142,17 @@ const Dashboard = () => {
               Retry
             </Button>
           </>
+        )}
+
+        {scannerOpen && (
+          <BarcodeScanner
+            onClose={() => setScannerOpen(false)}
+            onScanSuccess={(barcode) => {
+              setScannerOpen(false);
+              navigate(`/machines/barcode/${barcode}`);
+              // FIXME: machine details should be opened, it should support to ways: by id and by barcode
+            }}
+          />
         )}
 
         <List>
