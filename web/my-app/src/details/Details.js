@@ -23,6 +23,8 @@ import { useNavigate } from 'react-router-dom';
 import client from '../client';
 
 function MachineDetails() {
+  alert("console.log([MachineDetails] mounted);")
+  
   const navigate = useNavigate();
   const { id } = useParams();
 

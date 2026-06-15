@@ -172,6 +172,71 @@ https://192.168.0.136:3000
 
 ---
 
+## QR / Barcode Scanning
+
+The system supports QR code and barcode scanning from mobile devices.
+
+### Supported platforms
+
+Tested and supported:
+
+* Android 13+
+* Google Chrome
+* Chromium
+
+Not tested or unsupported:
+
+* DuckDuckGo Browser
+* Opera Mini
+* Browsers with custom certificate validation logic
+
+### HTTPS requirement
+
+Camera access requires HTTPS.
+
+For local development, HTTPS is provided using a local CA generated with `mkcert`.
+
+See the **HTTPS for mobile development** section for details.
+
+### Scanning workflow
+
+1. User opens Dashboard.
+2. User presses Scan button.
+3. Camera view opens.
+4. QR code or barcode is scanned.
+5. Frontend calls:
+
+```http
+GET /api/v1/machine/barcode/{barcode}
+```
+
+6. If a machine is found:
+
+```text
+/machines/{id}
+```
+
+page is opened automatically.
+
+7. If no machine is found:
+
+* show notification;
+* remain on Dashboard.
+
+### Development notes
+
+* The scanner attempts to use the device rear camera.
+* Rear camera selection depends on browser and device capabilities.
+* If rear camera cannot be identified, the first available camera is used.
+* Camera access is only guaranteed on supported browsers.
+
+### Known limitations
+
+* Browser camera labels are vendor-specific.
+* Some Android devices expose multiple rear cameras.
+* Camera ordering is not standardized between devices.
+
+
 ## Known issues
 
 * Under VPN, Docker dependencies and npm packages may work unstably.

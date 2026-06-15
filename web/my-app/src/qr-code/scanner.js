@@ -4,6 +4,12 @@ import * as Html5QrcodeLib from "html5-qrcode";
 const BarcodeScanner = ({ onScanSuccess, onClose }) => {
   const scannerRef = useRef(null);
 
+  // QR уже обработан
+  const scanHandledRef = useRef(false);
+
+  // scanner уже остановлен
+  const stoppedRef = useRef(false);
+
   useEffect(() => {
     let scanner;
 
@@ -13,53 +19,83 @@ const BarcodeScanner = ({ onScanSuccess, onClose }) => {
       rememberLastUsedCamera: true,
     };
 
-    // 1. Получаем список камер (static method)
-    Html5QrcodeLib.Html5Qrcode.getCameras()
-      .then((devices) => {
+    const stopScanner = async () => {
+      if (
+        stoppedRef.current ||
+        !scannerRef.current
+      ) {
+        return;
+      }
+
+      stoppedRef.current = true;
+
+      try {
+        await scannerRef.current.stop();
+      } catch (err) {
+        console.warn("Scanner stop warning:", err);
+      }
+
+      scannerRef.current = null;
+    };
+
+    const startScanner = async () => {
+      try {
+        const devices =
+          await Html5QrcodeLib.Html5Qrcode.getCameras();
+
         if (!devices || devices.length === 0) {
           console.error("No cameras found");
           return;
         }
 
-        const cameraId = devices[0].id;
+        scanner = new Html5QrcodeLib.Html5Qrcode(
+          "reader"
+        );
 
-        // 2. Создаём ИНСТАНС сканера
-        scanner = new Html5QrcodeLib.Html5Qrcode("reader");
         scannerRef.current = scanner;
 
-        // 3. Стартуем сканирование
-        return scanner.start(
-          cameraId,
-          config,
-          (decodedText) => {
-            // SUCCESS
-            scanner
-              .stop()
-              .then(() => {
-                onScanSuccess(decodedText);
-              })
-              .catch((err) => console.error("Stop error:", err));
+        await scanner.start(
+          {
+            facingMode: "environment",
           },
+          config,
+
+          async (decodedText) => {
+            // предотвращаем повторное чтение
+            if (scanHandledRef.current) {
+              return;
+            }
+
+            scanHandledRef.current = true;
+
+            try {
+              await stopScanner();
+
+              onScanSuccess(decodedText);
+            } catch (err) {
+              console.error(
+                "Scan success handling failed:",
+                err
+              );
+            }
+          },
+
           (errorMessage) => {
-            // ignore frequent scan errors
+            // html5-qrcode генерирует много ошибок во время поиска
+            // это нормальное поведение
+
             // console.debug(errorMessage);
           }
         );
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("Camera error:", err);
-      });
-
-    // cleanup
-    return () => {
-      if (scannerRef.current) {
-        scannerRef.current
-          .stop()
-          .catch(() => {})
-          .finally(() => {
-            scannerRef.current = null;
-          });
       }
+    };
+
+    startScanner();
+
+    return () => {
+      stopScanner();
     };
   }, [onScanSuccess]);
 
@@ -67,7 +103,25 @@ const BarcodeScanner = ({ onScanSuccess, onClose }) => {
     <div style={styles.overlay}>
       <div style={styles.container}>
         <div id="reader" style={styles.reader} />
-        <button style={styles.closeBtn} onClick={onClose}>
+
+        <button
+          style={styles.closeBtn}
+          onClick={async () => {
+            if (
+              scannerRef.current &&
+              !stoppedRef.current
+            ) {
+              try {
+                stoppedRef.current = true;
+                await scannerRef.current.stop();
+              } catch (err) {
+                console.warn(err);
+              }
+            }
+
+            onClose();
+          }}
+        >
           Close
         </button>
       </div>
@@ -88,6 +142,7 @@ const styles = {
     alignItems: "center",
     zIndex: 9999,
   },
+
   container: {
     width: "100%",
     maxWidth: 400,
@@ -95,9 +150,11 @@ const styles = {
     padding: 10,
     borderRadius: 8,
   },
+
   reader: {
     width: "100%",
   },
+
   closeBtn: {
     marginTop: 10,
     width: "100%",
