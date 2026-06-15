@@ -52,3 +52,5 @@ node_modules/
 
 # Optional: .env file for sensitive configuration (if used)
 web/.env
+
+web/my-app/certs/*

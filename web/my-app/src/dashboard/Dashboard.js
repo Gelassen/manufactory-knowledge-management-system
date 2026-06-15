@@ -19,6 +19,7 @@ import client from '../client';
 import BarcodeScanner from "../qr-code/scanner";
 
 const Dashboard = () => {
+  
   const navigate = useNavigate();
 
   const [machines, setMachines] = useState([]);
@@ -150,7 +151,7 @@ const Dashboard = () => {
             onScanSuccess={(barcode) => {
               setScannerOpen(false);
               navigate(`/machines/barcode/${barcode}`);
-              // FIXME: machine details should be opened, it should support to ways: by id and by barcode
+              // FIXME: machine details should be opened, it should support two ways: by id and by barcode
             }}
           />
         )}
