@@ -24,12 +24,15 @@ import AddBreakdown from '../add-new/AddNewBreakdown';
 const theme = createTheme();
 
 // Отдельный компонент для AppBar
-const AppHeader = () => {
+const AppHeader = ({ actions }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const location = useLocation();
 
-  const isDetailsPage = /^\/machines\/\d+$/.test(location.pathname);
+  const isDetailsPage =
+    location.pathname.startsWith('/machines/') &&
+    !location.pathname.includes('/breakdowns') &&
+    location.pathname !== '/machines/new';
   const machineId = isDetailsPage ? location.pathname.split('/')[2] : null;
 
   const handleMenuClick = (event) => {
@@ -75,7 +78,7 @@ const AppHeader = () => {
         {/* Кнопки QR и + только на странице деталей */}
         {isDetailsPage && (
           <Box sx={{ display: 'flex', gap: 0.5, mr: 1 }}>
-            <IconButton 
+            {/* <IconButton 
               color="inherit" 
               onClick={() => window.showQrCode && window.showQrCode()}
             >
@@ -84,6 +87,37 @@ const AppHeader = () => {
             <IconButton 
               color="inherit" 
               onClick={() => window.addNewBreakdown && window.addNewBreakdown()}
+            >
+              <AddCircleOutlineIcon />
+            </IconButton> */}
+
+            {/* <IconButton
+              color="inherit"
+              disabled={!window.showQrCode}
+              onClick={() => window.showQrCode?.()}
+            >
+              <QrCodeIcon />
+            </IconButton>
+
+            <IconButton
+              color="inherit"
+              disabled={!window.addNewBreakdown}
+              onClick={() => window.addNewBreakdown?.()}
+            >
+              <AddCircleOutlineIcon />
+            </IconButton> */}
+            <IconButton
+              color="inherit"
+              disabled={!actions.showQrCode}
+              onClick={actions.showQrCode}
+            >
+              <QrCodeIcon />
+            </IconButton>
+
+            <IconButton
+              color="inherit"
+              disabled={!actions.addNewBreakdown}
+              onClick={actions.addNewBreakdown}
             >
               <AddCircleOutlineIcon />
             </IconButton>
@@ -118,10 +152,16 @@ const AppHeader = () => {
 };
 
 const App = () => {
+  
+  const [headerActions, setHeaderActions] = useState({
+    showQrCode: null,
+    addNewBreakdown: null,
+  });
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <AppHeader />
+        <AppHeader actions={headerActions} />
 
         <Container 
           maxWidth="lg" 
@@ -137,7 +177,14 @@ const App = () => {
             <Route path="/machines/new" element={<AddMachine />} />
             <Route path="/machines/:machineId/breakdowns/edit/:id" element={<AddBreakdown />} />
             <Route path="/machines/:machineId/breakdowns" element={<AddBreakdown />} />
-            <Route path="/machines/:id" element={<MachineDetails />} />
+            <Route 
+                path="/machines/:id" 
+                element={<MachineDetails setHeaderActions={setHeaderActions} />} 
+              />
+            <Route 
+                path="/machines/barcode/:barcode" 
+                element={<MachineDetails setHeaderActions={setHeaderActions} />} 
+              />
           </Routes>
         </Container>
       </Router>
