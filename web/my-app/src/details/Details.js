@@ -231,7 +231,7 @@ function MachineDetails({ setHeaderActions }) {
         maxWidth="xs"
         fullWidth
       >
-        <DialogTitle>QR</DialogTitle>
+        <DialogTitle sx={{textAlign: "center",}}>QR</DialogTitle>
 
         <DialogContent
           sx={{

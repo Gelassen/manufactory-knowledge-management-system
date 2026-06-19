@@ -1,94 +1,92 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import {
+  Box,
+  Typography,
+  CircularProgress,
+  IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import * as Html5QrcodeLib from "html5-qrcode";
 
 const BarcodeScanner = ({ onScanSuccess, onClose }) => {
   const scannerRef = useRef(null);
-
-  // QR уже обработан
   const scanHandledRef = useRef(false);
-
-  // scanner уже остановлен
   const stoppedRef = useRef(false);
+
+  const [status, setStatus] = useState("requesting-permission");
+
+  const stopScanner = async () => {
+    if (stoppedRef.current || !scannerRef.current) return;
+
+    stoppedRef.current = true;
+
+    try {
+      await scannerRef.current.stop();
+      await scannerRef.current.clear();
+    } catch (err) {
+      console.warn("Scanner stop warning:", err);
+    }
+
+    scannerRef.current = null;
+  };
+
+  const handleClose = async () => {
+    await stopScanner();
+    onClose();
+  };
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, []);
 
   useEffect(() => {
     let scanner;
 
-    const config = {
-      fps: 10,
-      qrbox: 250,
-      rememberLastUsedCamera: true,
-    };
-
-    const stopScanner = async () => {
-      if (
-        stoppedRef.current ||
-        !scannerRef.current
-      ) {
-        return;
-      }
-
-      stoppedRef.current = true;
-
-      try {
-        await scannerRef.current.stop();
-      } catch (err) {
-        console.warn("Scanner stop warning:", err);
-      }
-
-      scannerRef.current = null;
-    };
-
     const startScanner = async () => {
       try {
-        const devices =
-          await Html5QrcodeLib.Html5Qrcode.getCameras();
+        const devices = await Html5QrcodeLib.Html5Qrcode.getCameras();
 
         if (!devices || devices.length === 0) {
-          console.error("No cameras found");
+          setStatus("error");
           return;
         }
 
-        scanner = new Html5QrcodeLib.Html5Qrcode(
-          "reader"
-        );
-
+        scanner = new Html5QrcodeLib.Html5Qrcode("reader");
         scannerRef.current = scanner;
 
         await scanner.start(
+          { facingMode: "environment" },
           {
-            facingMode: "environment",
+            fps: 10,
+            qrbox: undefined, // важно: full-screen режим без «окна»
+            rememberLastUsedCamera: true,
           },
-          config,
-
           async (decodedText) => {
-            // предотвращаем повторное чтение
-            if (scanHandledRef.current) {
-              return;
-            }
+            if (scanHandledRef.current) return;
 
             scanHandledRef.current = true;
 
             try {
               await stopScanner();
-
               onScanSuccess(decodedText);
             } catch (err) {
-              console.error(
-                "Scan success handling failed:",
-                err
-              );
+              console.error("Scan handling failed:", err);
             }
           },
-
-          (errorMessage) => {
-            // html5-qrcode генерирует много ошибок во время поиска
-            // это нормальное поведение
-
-            // console.debug(errorMessage);
-          }
+          () => {}
         );
+
+        setStatus("scanning");
       } catch (err) {
         console.error("Camera error:", err);
+        setStatus("error");
       }
     };
 
@@ -99,66 +97,107 @@ const BarcodeScanner = ({ onScanSuccess, onClose }) => {
     };
   }, [onScanSuccess]);
 
-  return (
-    <div style={styles.overlay}>
-      <div style={styles.container}>
-        <div id="reader" style={styles.reader} />
+  const ui = (
+    <Box sx={styles.overlay}>
+      <IconButton onClick={handleClose} sx={styles.closeBtn}>
+        <CloseIcon sx={{ color: "white" }} />
+      </IconButton>
 
-        <button
-          style={styles.closeBtn}
-          onClick={async () => {
-            if (
-              scannerRef.current &&
-              !stoppedRef.current
-            ) {
-              try {
-                stoppedRef.current = true;
-                await scannerRef.current.stop();
-              } catch (err) {
-                console.warn(err);
-              }
-            }
+      <Box id="reader" sx={styles.reader} />
 
-            onClose();
-          }}
-        >
-          Close
-        </button>
-      </div>
-    </div>
+      {status !== "scanning" && (
+        <Box sx={styles.placeholder}>
+          {status === "requesting-permission" && (
+            <>
+              <CircularProgress />
+              <Typography variant="h5" sx={{ mt: 3, mb: 2 }}>
+                Preparing camera...
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ maxWidth: 320, textAlign: "center", lineHeight: 1.6 }}
+              >
+                Please allow camera access in your browser.
+              </Typography>
+            </>
+          )}
+
+          {status === "error" && (
+            <>
+              <Typography variant="h5" sx={{ mb: 2 }}>
+                Camera unavailable
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ maxWidth: 320, textAlign: "center", lineHeight: 1.6 }}
+              >
+                Please check camera permissions and try again.
+              </Typography>
+            </>
+          )}
+        </Box>
+      )}
+    </Box>
   );
+
+  return createPortal(ui, document.body);
 };
 
 const styles = {
   overlay: {
     position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: "rgba(0,0,0,0.8)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    inset: 0,
     zIndex: 9999,
-  },
 
-  container: {
+    background: "rgba(0,0,0,0.92)",
+
     width: "100%",
-    maxWidth: 400,
-    background: "#fff",
-    padding: 10,
-    borderRadius: 8,
+    height: "100%",
+
+    overflow: "hidden",
   },
 
   reader: {
+    position: "absolute",
+    inset: 0,
+
     width: "100%",
+    height: "100%",
+
+    "& video": {
+      width: "100% !important",
+      height: "100% !important",
+      objectFit: "cover",
+    },
+
+    "& canvas": {
+      width: "100% !important",
+      height: "100% !important",
+    },
+  },
+
+  placeholder: {
+    position: "absolute",
+    inset: 0,
+
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+
+    padding: 4,
+    boxSizing: "border-box",
+
+    color: "white",
+    textAlign: "center",
+    pointerEvents: "none",
   },
 
   closeBtn: {
-    marginTop: 10,
-    width: "100%",
-    padding: 10,
+    position: "absolute",
+    top: 16,
+    left: 16,
+    zIndex: 10000,
   },
 };
 
