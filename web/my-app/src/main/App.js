@@ -78,34 +78,6 @@ const AppHeader = ({ actions }) => {
         {/* Кнопки QR и + только на странице деталей */}
         {isDetailsPage && (
           <Box sx={{ display: 'flex', gap: 0.5, mr: 1 }}>
-            {/* <IconButton 
-              color="inherit" 
-              onClick={() => window.showQrCode && window.showQrCode()}
-            >
-              <QrCodeIcon />
-            </IconButton>
-            <IconButton 
-              color="inherit" 
-              onClick={() => window.addNewBreakdown && window.addNewBreakdown()}
-            >
-              <AddCircleOutlineIcon />
-            </IconButton> */}
-
-            {/* <IconButton
-              color="inherit"
-              disabled={!window.showQrCode}
-              onClick={() => window.showQrCode?.()}
-            >
-              <QrCodeIcon />
-            </IconButton>
-
-            <IconButton
-              color="inherit"
-              disabled={!window.addNewBreakdown}
-              onClick={() => window.addNewBreakdown?.()}
-            >
-              <AddCircleOutlineIcon />
-            </IconButton> */}
             <IconButton
               color="inherit"
               disabled={!actions.showQrCode}
