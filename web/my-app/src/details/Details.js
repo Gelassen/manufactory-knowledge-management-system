@@ -225,13 +225,29 @@ function MachineDetails({ setHeaderActions }) {
         )}
       </Paper>
 
-      <Dialog open={qrOpen} onClose={() => setQrOpen(false)}>
+      <Dialog
+        open={qrOpen}
+        onClose={() => setQrOpen(false)}
+        maxWidth="xs"
+        fullWidth
+      >
         <DialogTitle>QR</DialogTitle>
-        <DialogContent>
+
+        <DialogContent
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            p: 4,
+          }}
+        >
           {qrLoading ? (
             <CircularProgress />
           ) : (
-            <QRCodeCanvas value={qrValue || ''} />
+            <QRCodeCanvas
+              value={qrValue || ''}
+              size={Math.min(window.innerWidth * 0.5, 300)}
+            />
           )}
         </DialogContent>
       </Dialog>
