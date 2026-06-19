@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import SearchIcon from '@mui/icons-material/Search';
+import { useTheme, useMediaQuery } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import client from '../client';
 import BarcodeScanner from "../qr-code/scanner";
@@ -27,7 +28,11 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
 
   const [page, setPage] = useState(1);
-  const [pageSize] = useState(2);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const pageSize = isMobile ? 3 : 5;
   const [totalPages, setTotalPages] = useState(1);
 
   const [searchText, setSearchText] = useState('');
