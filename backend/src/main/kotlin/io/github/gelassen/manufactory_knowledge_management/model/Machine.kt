@@ -2,6 +2,7 @@ package io.github.gelassen.manufactory_knowledge_management.model
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.*
+import java.util.UUID
 
 /**
  * To prevent infinite recursion use solutions described in this
@@ -15,7 +16,12 @@ data class Machine(
     var id: Long? = null,
     var name: String,
     var manufacturer: String,
-    var barcode: String,
+    @Column(
+        nullable = false,
+        unique = true,
+        length = 36
+    )
+    var barcode: String = UUID.randomUUID().toString(),
 
     @OneToMany(
         mappedBy = "machine",

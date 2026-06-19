@@ -133,7 +133,7 @@ class MachineController(
         @PathVariable id: Long
     ): ResponseEntity<ApiResponse<Map<String, String>>> {
 
-        val qrValue = qrService.generateQrValue(id)
+        val qrValue = qrService.getOrCreateQrValue(id)
 
         val responseBody = mapOf(
             "qrValue" to qrValue

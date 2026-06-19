@@ -150,9 +150,7 @@ const Dashboard = () => {
             onClose={() => setScannerOpen(false)}
             onScanSuccess={(barcodeDecodedValue) => {
               setScannerOpen(false);
-              // navigate(`/machines/barcode/${barcode}`);
-              navigate(`/machines/${barcodeDecodedValue}`);
-              // FIXME: machine details should be opened, it should support two ways: by id and by barcode
+              navigate(`/machines/barcode/${barcodeDecodedValue}`);
             }}
           />
         )}

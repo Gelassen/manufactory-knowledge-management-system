@@ -28,6 +28,26 @@ Web client:
 http://localhost:3000
 ```
 
+## Known issues
+In case of docker dependencies availability issues:
+```
+docker compose --profile dev --profile prod build --no-cache
+docker compose --profile dev --profile prod up -d
+```
+
+In case of more serious dependency issues build each service independently and 
+turn off parallel build of gradle project over properties below:
+```
+org.gradle.daemon=false
+org.gradle.parallel=false
+org.gradle.workers.max=1
+
+systemProp.org.gradle.internal.http.connectionTimeout=600000
+systemProp.org.gradle.internal.http.socketTimeout=600000
+systemProp.org.gradle.internal.http.retry=true
+systemProp.org.gradle.internal.http.maxRetries=10
+```
+
 ---
 
 ## Mobile browser support
@@ -85,7 +105,7 @@ rootCA-key.pem
 Example:
 
 ```bash
-mkcert 192.168.0.136 localhost
+mkcert <your server ip> localhost
 ```
 
 Generated files:
