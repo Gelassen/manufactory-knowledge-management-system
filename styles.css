@@ -141,99 +141,77 @@ footer {
 }
 
 .pricing-table-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
     overflow-x: auto;
     margin-bottom: 80px;
 }
 
 .pricing-table {
     width: 100%;
-    min-width: 1000px;
+    min-width: 960px;
     border-collapse: collapse;
-    table-layout: fixed;
-}
-
-.pricing-table col:first-child {
-    width: 34%;
-}
-
-.pricing-table col:nth-child(2),
-.pricing-table col:nth-child(3),
-.pricing-table col:nth-child(4) {
-    width: 22%;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
 }
 
 .pricing-table th,
 .pricing-table td {
-    padding: 18px 20px;
-    border: 1px solid #e5e5e5;
+    padding: 18px 16px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
     vertical-align: middle;
 }
 
 .pricing-table thead th {
-    background: #fafafa;
+    background: #f8fafc;
+    font-weight: 600;
+    padding: 24px 16px 16px;
 }
 
-.pricing-table tbody tr:nth-child(even) {
-    background: #fcfcfc;
+.plan-header {
+    position: relative;
 }
 
-.pricing-table td:first-child,
-.pricing-table th:first-child {
+.plan-header.community { background: #f0f9ff; }
+.plan-header.saas      { background: #f0fdf4; }
+.plan-header.services  { background: #fefce8; }
+
+.plan-price {
+    margin-top: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #334155;
+}
+
+.pricing-table td:first-child {
     text-align: left;
+    font-weight: 500;
+    width: 38%;
+    padding-left: 28px;
+}
+
+/* Чекмарки и тире */
+.pricing-table td:not(:first-child) {
+    font-size: 1.1rem;
+}
+
+.pricing-table td:not(:first-child):has(✓) {
+    color: #15803d;
     font-weight: 600;
 }
 
-.pricing-table td:not(:first-child),
-.pricing-table th:not(:first-child) {
-    text-align: center;
-}
-
-.plan-price {
-    margin-top: 8px;
-    font-size: 0.9rem;
-    color: #666;
-    font-weight: normal;
-}
-
-.pricing-cards {
-    display: grid;
-    grid-template-columns: repeat(
-        auto-fit,
-        minmax(280px, 1fr)
-    );
-    gap: 32px;
-}
-
-.pricing-card {
-    border: 1px solid #e5e5e5;
-    border-radius: 12px;
-    padding: 32px;
-}
-
-.pricing-card h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-}
-
-.pricing-card ul {
-    margin-top: 24px;
-}
-
-.center {
-    text-align: center;
-}
-
+/* Мобильная адаптация */
 @media (max-width: 768px) {
     .pricing-table {
-        min-width: 850px;
+        min-width: 700px;
     }
-
     .pricing-table th,
     .pricing-table td {
-        padding: 14px;
+        padding: 14px 10px;
         font-size: 0.95rem;
+    }
+    .pricing-table td:first-child {
+        padding-left: 16px;
     }
 }
