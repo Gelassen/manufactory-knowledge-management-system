@@ -81,15 +81,33 @@ section {
     background: #f7f7f7;
 }
 
-.screenshot {
-    margin-bottom: 80px;
-}
-
+/* === Screenshot images === */
 .screenshot img {
     width: 100%;
+    max-width: 100%;
+    height: auto;
     border: 1px solid #ddd;
     border-radius: 12px;
     margin-top: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    
+    /* Ограничиваем максимальную высоту, чтобы не было гигантских картинок */
+    max-height: 620px;           /* подбери под себя */
+    object-fit: contain;         /* сохраняет пропорции */
+    background: #f8f9fa;
+}
+
+/* Для очень высоких wireframes (второй и третий) можно сделать чуть строже */
+.screenshot:nth-child(3) img,
+.screenshot:nth-child(4) img {
+    max-height: 520px;
+}
+
+/* Мобильная версия */
+@media (max-width: 768px) {
+    .screenshot img {
+        max-height: 420px;
+    }
 }
 
 ul {
