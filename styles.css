@@ -134,40 +134,61 @@ footer {
     }
 }
 
+
 .hero-small {
     padding: 80px 0;
     text-align: center;
 }
 
 .pricing-table-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
     overflow-x: auto;
     margin-bottom: 80px;
 }
 
 .pricing-table {
     width: 100%;
+    min-width: 1000px;
     border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.pricing-table col:first-child {
+    width: 34%;
+}
+
+.pricing-table col:nth-child(2),
+.pricing-table col:nth-child(3),
+.pricing-table col:nth-child(4) {
+    width: 22%;
 }
 
 .pricing-table th,
 .pricing-table td {
-    padding: 18px;
+    padding: 18px 20px;
     border: 1px solid #e5e5e5;
+    vertical-align: middle;
 }
 
-.pricing-table th {
+.pricing-table thead th {
     background: #fafafa;
-    text-align: center;
 }
 
-.pricing-table td {
-    text-align: center;
+.pricing-table tbody tr:nth-child(even) {
+    background: #fcfcfc;
 }
 
 .pricing-table td:first-child,
 .pricing-table th:first-child {
     text-align: left;
     font-weight: 600;
+}
+
+.pricing-table td:not(:first-child),
+.pricing-table th:not(:first-child) {
+    text-align: center;
 }
 
 .plan-price {
@@ -203,4 +224,16 @@ footer {
 
 .center {
     text-align: center;
+}
+
+@media (max-width: 768px) {
+    .pricing-table {
+        min-width: 850px;
+    }
+
+    .pricing-table th,
+    .pricing-table td {
+        padding: 14px;
+        font-size: 0.95rem;
+    }
 }
