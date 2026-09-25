@@ -4,7 +4,7 @@ This system is made to solve business issues for one manufactory. It is also int
 
 Web site: https://gelassen.github.io/manufactory-knowledge-management-system/
 
-Case study: https://gelassen.github.io/blog/2026/06/20/case-study-manufactory-knowledge-management-system.html
+Case study: https://gelassen.github.io/2026/06/20/case-study-manufactory-knowledge-management-system.html
 
 # Deployment
 
